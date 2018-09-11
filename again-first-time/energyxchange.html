@@ -1,0 +1,55 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css"> 
+    <link rel="icon" href="again.png">
+    <style type="text/css">  
+        body { margin:0; }  
+    </style>  
+</head>
+    
+<body> 
+    
+<div class="sample">
+    <div class="wrapper">
+    <div class="center">SEND</div>
+    </div>
+</div>   
+    
+</body>
+    
+
+    
+<script>
+        
+    $(document).ready(function() {
+      $('.sample').click(function() {
+        $(this).animate({
+          backgroundColor: "white"
+        }, 1000).delay(2000).queue(function() {
+          $(this).animate({
+            backgroundColor: "black"
+          }, 1000).dequeue();
+        });
+          
+        $('.center').animate({
+          backgroundColor: "white"
+        }, 1000).delay(2000).queue(function() {
+          $('.center').animate({
+            backgroundColor: "black"
+          }, 1000).dequeue();
+        });
+        var el = document.documentElement,
+        rfs = el.requestFullscreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen 
+        ;
+        rfs.call(el);
+      });
+    });
+    
+</script>
+ 

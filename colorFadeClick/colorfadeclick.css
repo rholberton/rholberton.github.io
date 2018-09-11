@@ -1,0 +1,21 @@
+
+.sample {
+  height:100%;
+  margin:0;
+  align-items: center;
+  font: normal 12px/18px 'Arial';
+  color: #fff;
+  background-color: black;
+/*padding: 20px;*/
+  cursor: pointer
+}
+
+.wrapper {
+    align-items: center;
+    text-align: center;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+}

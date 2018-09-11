@@ -1,0 +1,46 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="colorfadeclick.css">
+    <style type="text/css">  
+        body { margin:0; }  
+    </style>  
+</head>
+    
+<body>
+<div class="sample">
+    <div class="wrapper">
+    <button class="button">SEND</button>
+    </div>
+</div>
+</body>
+    
+<script>
+    $(document).ready(function() {
+
+      $('.sample').click(function() {
+
+        $(this).animate({
+          backgroundColor: "white"
+        }, 1000).delay(2000).queue(function() {
+          $(this).animate({
+            backgroundColor: "black"
+          }, 1000).dequeue();
+        });
+
+        var el = document.documentElement,
+        rfs = el.requestFullscreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen 
+        ;
+
+        rfs.call(el);
+
+      });
+
+    });
+</script>
+    
+    
