@@ -1,0 +1,71 @@
+<!-- This is a html style comment -->
+
+<!DOCTYPE html> <!-- The DOCTYPE declares the document is a html type.  This is called the document type definition (DTD).-->
+
+<!-- The html tag says we are about to enter html code to add content and links to our page
+scroll down to line *** to see the closing html tag, it is identical to line 6 except  -->
+<html>
+	<!-- This the head.  The HEAD element contains information about the current document, such as its title, keywords that 
+    may be useful to search engines, and other data that is not considered document content.  This includes any CSS styling -->
+    <head>
+        <title> Example 0.2</title>
+
+        <!-- The style tag says we are about to enter CSS code to style our page -->
+        <style> 
+        /*This is a CSS style comment, you use this in the <style> element to add comments*/
+            body {/*any style you would like to apply to code in the <body> element of your html, generally background styles */
+                background-color: #42f442; /*sets the background color*/
+                background-image: url("resources/eso1431a_sm.jpg"); /*draws an image on top of the background*/
+            }
+
+            p { /*any style in the p class will apply to all text that you define as a paragraph (p) element, see lines ***-*** */
+            text-align: left; /*paragraph text will align on the left side of the screen*/
+            color: blue; /*paragraph text will be blue*/
+            }
+            
+            h2 { /*any style in the h2 class will apply to all text that you define as a Heading 2 (h2) element, see line 36 for h2 text example */
+            text-align: center; /*Heading 2 text will align in the center of the screen*/
+            color: red; /*paragraph text will be red*/
+            }
+        </style>  <!-- The closing style tag says we are finished with the CSS style and will be writing html again -->   
+    </head> <!-- The closing head tag says we are finished with the head element and will be writing content -->
+
+    <!--The body element contains the document's actual content -->
+    <body>
+        <h2> Where Does The Art Go? </h2> <!--Indicated the text in white is a Heading 2 element.  See lines 26-29 for style -->
+    	
+        <!--Indicated the text in white is a paragrpah element.  See lines 21-24 for style -->
+        <p> 
+    		Embarking on a journey into a new universe of information and media representation. 
+    	</p>
+    	
+        <!-- Attributes (in quotes) tell the program where to find the image and how big to display it -->
+    	<img src="resources/net_art.jpg" width="300" > 
+    	<br> <!-- images (img) and line break (br) elements take no content and thus no matching "end" tag-->
+    	
+        <!--The <a> tag defines a hyperlink, which is used to link from one page to another. The href attribute is where the link will take you.  In this case the link takes you to an external image link.   The text between the beginning and end <a> tags is the text the webpage will display for the link. -->
+    	<a href="http://235bowery.s3.amazonaws.com/events/850/thumbnails/565x565x1.jpg"> Here is a link </a> 
+    	<p>to the original source of the image.</p> 
+
+    	<p> <!--Indicates the text is a paragrpah element.  See lines 21-24 for style -->
+    		The possibilities seem endless, but who can even imagine them all? 
+    	</p>
+    	<p>
+    		Your next stop ..... the Twilight Zone!
+    	</p>
+
+        <h3>Links</h3>  <!--Heading 3 text element. -->
+        <nav role="navigation">
+
+        <!-- The <ul> tag defines an unordered (bulleted) list. Use the <ul> tag together with the <li> tag to create unordered lists. -->
+        <ul>
+            <!-- The <li> tag defines a list item. The <li> tag is used in ordered lists(<ol>), unordered lists (<ul>), and in menu lists (<menu>). -->
+            <li><a href="index.html" title="Home">Home</a></li>  <!--The <a> hyperlink contains an attribute that directs the link to a local html file. -->
+            <li><a href="thirdpage.html" title="Third Page">Third Page</a></li> 
+            <li><a href="thirdpage.html" title="Third Page">Third Page</a></li> 
+        </ul>
+      </nav>    
+    </body>
+
+</html>
+

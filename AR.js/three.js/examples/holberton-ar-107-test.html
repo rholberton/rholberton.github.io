@@ -1,0 +1,327 @@
+
+<!DOCTYPE html>
+
+<title>AR on the web for SJSU</title>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<!-- import the three.js library --> <!-- import the three.js library -->
+<script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
+
+<!-- import the ar.js library -->
+<script src="../build/ar.js"></script>
+
+
+<!-- sets the local directory (the code '../' navigates up one directory from exmples to three.js) -->
+<script>THREEx.ArToolkitContext.baseURL = '../'</script>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+
+    <!-- imports libraries to import fbx animations -->
+    <script src="../build/three.js"></script>
+    
+    <script src="js/loaders/OBJLoader.js"></script>
+
+    <script src="js/libs/inflate.min.js"></script>
+    <script src="js/loaders/FBXLoader.js"></script>
+
+    <script src="js/controls/OrbitControls.js"></script>
+
+    <script src="js/Detector.js"></script>
+    <!--ALREADY IMPORTED-- <script src="js/libs/stats.min.js"></script> -->
+    
+    <script>
+        
+        if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+        
+        var clock = new THREE.Clock();
+        var mixers = [];
+        var stats;
+    
+        
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Init
+    //      sets up how the webpage will be diplayed (fullscreen)
+	//////////////////////////////////////////////////////////////////////////////////
+        // init renderer
+        var renderer	= new THREE.WebGLRenderer({
+            // antialias	: true,
+            alpha: true
+        });
+        renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+        // renderer.setPixelRatio( 1/2 );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.domElement.style.position = 'absolute'
+        renderer.domElement.style.top = '0px'
+        renderer.domElement.style.left = '0px'
+        document.body.appendChild( renderer.domElement );
+        // array of functions for the rendering loop
+        var onRenderFcts= [];
+        // init scene and camera
+        var scene	= new THREE.Scene();
+        
+        light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+        light.position.set( 0, 200, 0 );
+        scene.add( light );
+        light = new THREE.DirectionalLight( 0xffffff );
+        light.position.set( 0, 200, 100 );
+        light.castShadow = true;
+        light.shadow.camera.top = 180;
+        light.shadow.camera.bottom = -100;
+        light.shadow.camera.left = -120;
+        light.shadow.camera.right = 120;
+        scene.add( light );
+        
+        //////////FROM FBX IMPORT
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+        //////////////////////////////////////////////////////////////////////////////////
+        //		Initialize a basic camera
+        //////////////////////////////////////////////////////////////////////////////////
+        //      Create a camera
+        camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+        scene.add(camera);
+        ////////////////////////////////////////////////////////////////////////////////
+        //      handle arToolkitSource
+        //        source to use for analysis: points the code toward either a live video feed, a static image, or a video file
+        ////////////////////////////////////////////////////////////////////////////////
+        var arToolkitSource = new THREEx.ArToolkitSource({
+            // to read from the webcam (comment out line below if using static image or video file)
+            sourceType : 'webcam',
+            
+            // to read from an image uncomment two lines below (remove // at the beginning of each line)
+            // sourceType : 'image',
+            // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',		
+            
+            // to read from a video uncomment two lines below (remove // at the beginning of each line)
+            // sourceType : 'video',
+            // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',		
+        })
+        arToolkitSource.init(function onReady(){
+            onResize()
+        })
+        // handle resize
+        window.addEventListener('resize', function(){
+            onResize()
+        })
+        function onResize(){
+            arToolkitSource.onResize()	
+            arToolkitSource.copySizeTo(renderer.domElement)	
+            if( arToolkitContext.arController !== null ){
+                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+            }	
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+        //          initialize arToolkitContext
+        ////////////////////////////////////////////////////////////////////////////////
+        // create atToolkitContext
+        var arToolkitContext = new THREEx.ArToolkitContext({
+            cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+            detectionMode: 'mono',
+            maxDetectionRate: 30,
+            canvasWidth: 80*3,
+            canvasHeight: 60*3,
+        })
+        // initialize it
+        arToolkitContext.init(function onCompleted(){
+            // copy projection matrix to camera
+            camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+        })
+        // update artoolkit on every frame
+        onRenderFcts.push(function(){
+            if( arToolkitSource.ready === false )	return
+            arToolkitContext.update( arToolkitSource.domElement )
+        })
+        ////////////////////////////////////////////////////////////////////////////////
+    //          Create a ArMarkerControls
+        //        Tutorial to make your own target image pattern: https://medium.com/arjs/how-to-create-your-own-marker-44becbec1105
+        //        More Help/Known problems with cutom images: https://github.com/jeromeetienne/AR.js/issues/366
+        ////////////////////////////////////////////////////////////////////////////////
+        var markerRoot = new THREE.Group
+        scene.add(markerRoot)
+        var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+            type : 'pattern',
+            ////////////////////////////////////////////////////////////////////////////////
+            //   Add your custom image here and comment out existing file (hiro or kanji)
+            ////////////////////////////////////////////////////////////////////////////////
+            patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
+            // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
+        })
+        // build smoothedControls
+        var smoothedRoot = new THREE.Group()
+        scene.add(smoothedRoot)
+        var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+            lerpPosition: 0.4,
+            lerpQuaternion: 0.3,
+            lerpScale: 1,
+        })
+        onRenderFcts.push(function(delta){
+            smoothedControls.update(markerRoot)
+        })
+        //////////////////////////////////////////////////////////////////////////////////
+        //		add objects in the scene
+        //      to comment out or un comment multiple lines select lines and press command + /
+        //      you can copy source code for simple shape from the three.js playground here: http://threejsplaygnd.brangerbriz.net/gui/
+        //      for more on using 3D models with AR.js and A-Frame see here: https://medium.com/@akashkuttappa/using-3d-models-with-ar-js-and-a-frame-84d462efe498
+        //////////////////////////////////////////////////////////////////////////////////
+        var arWorldRoot = smoothedRoot;
+        var geometry, material, mesh;
+        
+        ///////////////////////////////////////////////////////////
+        // add a static cube
+        geometry = new THREE.CubeGeometry(1,1,1);
+        material = new THREE.MeshNormalMaterial({
+            transparent : true,
+            opacity: 0.5,
+            side: THREE.DoubleSide
+        }); 
+        mesh = new THREE.Mesh( geometry, material );
+        mesh.position.y	= geometry.parameters.height/2
+        arWorldRoot.add(mesh);
+        // end cube code
+        ///////////////////////////////////////////////////////////
+        
+    
+        
+        ///////////////////////////////////////////////////////////
+        //add icosphere test from 3js playground
+        geometry = new THREE.IcosahedronGeometry(.3, 0); //edit scale (in this code a scale of 1 = size of target image)
+        var material	= new THREE.MeshNormalMaterial(); 
+        var mesh	= new THREE.Mesh( geometry, material );
+        mesh.position.y	= 0.5 //position y equals how far away from target 
+        arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
+        //end icosphere code
+        ///////////////////////////////////////////////////////////
+        
+        
+        ///////////////////////////////////////////////////////////
+//        // add a taurus with rotation animation
+//        geometry = new THREE.TorusKnotGeometry(0.3,0.1,64,16);
+//        material = new THREE.MeshNormalMaterial(); 
+//        mesh = new THREE.Mesh( geometry, material );
+//        mesh.position.y	= 0.5
+//        arWorldRoot.add( mesh );
+//        onRenderFcts.push(function(){
+//            mesh.rotation.x += 0.1
+//        })
+//        // end taurus code
+       ///////////////////////////////////////////////////////////
+        
+        
+        ///////////////////////////////////////////////////////////
+        // add a fbx model with animation
+        var loader = new THREE.FBXLoader();
+        loader.load( '../../data/data/handGLoptB.fbx', function ( object ) {
+            object.mixer = new THREE.AnimationMixer( object );
+            mixers.push( object.mixer );
+            var action = object.mixer.clipAction( object.animations[ 0 ] );
+            action.play();
+            object.traverse( function ( child ) {
+                if ( child.isMesh ) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            } );
+            object.scale.set(.02, .02, .02);
+            arWorldRoot.add( object );
+        } );
+        //end fbx code
+        ///////////////////////////////////////////////////////////
+        
+        
+        ///////////////////////////////////////////////////////////
+         //add obj model (static)
+         // obj texture
+
+         var manager = new THREE.LoadingManager();
+         manager.onProgress = function ( item, loaded, total ) {
+
+             console.log( item, loaded, total );
+
+         };
+
+         var textureLoader = new THREE.TextureLoader( manager );
+         var texture = textureLoader.load( '../../data/data/UV_Grid_Sm.jpg' );
+
+         // obj model
+         var onProgress = function ( xhr ) {
+             if ( xhr.lengthComputable ) {
+                 var percentComplete = xhr.loaded / xhr.total * 100;
+                 console.log( Math.round(percentComplete, 2) + '% downloaded' );
+             }
+         };
+
+         var onError = function ( xhr ) {
+         };
+
+         var loader = new THREE.OBJLoader( manager );
+         loader.load( '../../data/data/male02/male02.obj', function ( object ) {
+
+             object.traverse( function ( child ) {
+
+                 if ( child instanceof THREE.Mesh ) {
+
+                     child.material.map = texture;
+
+                 }
+
+             } );
+
+ //					object.position.y = - 95;
+ //					scene.add( object );
+             object.scale.set(.02, .02, .02);
+             arWorldRoot.add( object );
+
+         }, onProgress, onError );
+
+         //end obj code
+        ///////////////////////////////////////////////////////////
+        
+        
+        //////////FROM FBX IMPORT
+        stats = new Stats();
+        container.appendChild( stats.dom );
+        
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the whole thing on the page
+	//////////////////////////////////////////////////////////////////////////////////
+	
+        var stats2 = new Stats();
+        document.body.appendChild( stats2.dom );
+        // render the scene
+        onRenderFcts.push(function(){
+            renderer.render( scene, camera );
+            stats2.update();
+        })
+
+        // run the rendering loop
+        var lastTimeMsec= null
+        requestAnimationFrame(function animate(nowMsec){
+            // keep looping
+            requestAnimationFrame( animate );
+            // measure time
+            lastTimeMsec	= lastTimeMsec || nowMsec-1000/60
+            var deltaMsec	= Math.min(200, nowMsec - lastTimeMsec)
+            lastTimeMsec	= nowMsec
+            // call each update function
+            onRenderFcts.forEach(function(onRenderFct){
+                onRenderFct(deltaMsec/1000, nowMsec/1000)
+            })
+        })
+        
+    animate();
+        
+        function animate() {
+				requestAnimationFrame( animate );
+				if ( mixers.length > 0 ) {
+					for ( var i = 0; i < mixers.length; i ++ ) {
+						mixers[ i ].update( clock.getDelta() );
+					}
+				}
+				renderer.render( scene, camera );
+				stats.update();
+			}
+    
+</script></body>

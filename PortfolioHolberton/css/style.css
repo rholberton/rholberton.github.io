@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400|Questrial');
+
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+header a:hover {
+    background-color: yellow;
+}
+
+a:visited {
+    color: pink;
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	background-color: #dfe2db; 
+	font-family: 'Lato', sans-serif;
+}
+
+header {
+	background-color: #000; /* RH EDIT*/
+	top: 0;
+	width: 100%;
+	height: 70px;
+	position:fixed;
+	font-weight:800;
+	color:#fff;
+	z-index: 3; /* to bring the layer on top for the arrangement */
+}
+
+header ul {
+	display: flex;
+	justify-content: center;
+}
+
+header ul li {
+	list-style-type:none;
+	display: list-item;
+	line-height: 70px;
+	padding-left: 150px;
+}
+
+header ul li a { /* for links we need additional styling */
+	color:#fff;
+	text-decoration: none;
+}
+
+#list1 {
+	padding:0;
+}
+
+#main {
+	width: 100%;
+
+}
+
+.about {
+	padding: 100px 0; 
+	background-size: cover;
+	background-color: #fff;
+	background-image: url("../images/holberton_bw_crop_dark.jpg"); /* RH EDIT*/
+
+}
+.about h1 {
+	font-family: 'Questrial', sans-serif;
+	letter-spacing: 3px;
+	text-align: center;
+	font-size: 40pt;
+	margin-bottom: 50px;
+	color:#fff;
+}
+
+#circle {
+	width: 200px;
+	height: 200px;
+	background-image: url("../images/rh_portrait_outline_circle_grey.svg"); /* RH EDIT*/
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 250px;
+	margin: 0 auto;
+	opacity: 0.7;
+}
+
+.about p {
+	font-family: 'Lato', sans-serif; /* RH EDIT*/
+	font-weight: 300;
+	text-align: center;
+	font-size: 20px;
+	margin:0 auto;
+	margin-top: 70px;
+	max-width: 50%;
+	background-color: #000;
+	opacity: 0.7;
+	color:#FFF;
+	padding:15px;
+
+}
+
+.statement {
+	padding: 100px 0; 
+	background-size: cover;
+	background-color: #fff;
+}
+.statement h1 {
+	font-family: 'Questrial', sans-serif;
+	letter-spacing: 3px;
+	text-align: center;
+	font-size: 40pt;
+	margin-bottom: 50px;
+	color:#000;
+}
+
+.statement p {
+	font-family: 'Lato', sans-serif; /* RH EDIT*/
+	font-weight: 400;
+	text-align: left;
+	font-size: 20px;
+	margin:0 auto;
+	margin-top: 70px;
+	max-width: 650px;
+	color:#000;
+	padding:15px;
+
+}
+
+
+.usefullinks {
+	background-color: #ECF0F1;
+	padding-bottom: 100px;
+	padding-top:50px;
+	
+}
+
+.usefullinks h1 {
+	font-family: 'Questrial', sans-serif;
+	letter-spacing: 3px;
+	text-align: center;
+	font-size: 40pt;
+}
+
+#group {
+	width:100%;
+	height: auto;
+	display: flex;
+	justify-content: center;
+
+}
+
+#group div {
+	margin-top: 50px;
+	width:30%;
+	text-align: center;
+	float:left;
+
+}
+
+#group div img {
+	width:120px;
+	height: auto;
+}
+
+#group div h2 {
+	margin-top: 20px;
+	color:#1F3A93;
+}
+
+footer {
+	background-color: #000; /* RH EDIT*/
+	width: 100%;
+	height: auto;
+	padding-top: 50px;
+	text-align: center;
+}
+
+footer .social img {
+	margin-left: 50px;
+	width:64px;
+	height:64px;
+}
+
+#firstsocial {
+	margin-left:-50px;
+}
+
+footer p{
+	padding: 35px 0;
+	color: #fff;
+	font-weight: 700;
+}	
+	
+

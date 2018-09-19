@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: db50d2c4245b6450184eeca7031fb7c0
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Camera
+    100002: Group61280.002
+    100004: Hand_Left.001
+    100006: //RootNode
+    100008: Index Control
+    100010: Index Control_end
+    100012: Index_1
+    100014: Index_2
+    100016: Index_3
+    100018: Index_3_end
+    100020: Middle Control
+    100022: Middle Control_end
+    100024: Middle_1
+    100026: Middle_2
+    100028: Middle_3
+    100030: Middle_3_end
+    100032: PALM
+    100034: PALM_end
+    100036: Pinky_1
+    100038: Pinky_2
+    100040: Pinky_3
+    100042: Pinky_3_end
+    100044: Pinky_Control
+    100046: Pinky_Control_end
+    100048: Ring Control
+    100050: Ring Control_end
+    100052: Ring_1
+    100054: Ring_2
+    100056: Ring_3
+    100058: Ring_3_end
+    100060: Sun
+    100062: Thumb2
+    100064: Thumb_1
+    100066: Thumb_3
+    100068: Thumb_3_end
+    100070: ThumbControl
+    100072: ThumbControl_end
+    100074: Wrist
+    400000: Camera
+    400002: Group61280.002
+    400004: Hand_Left.001
+    400006: //RootNode
+    400008: Index Control
+    400010: Index Control_end
+    400012: Index_1
+    400014: Index_2
+    400016: Index_3
+    400018: Index_3_end
+    400020: Middle Control
+    400022: Middle Control_end
+    400024: Middle_1
+    400026: Middle_2
+    400028: Middle_3
+    400030: Middle_3_end
+    400032: PALM
+    400034: PALM_end
+    400036: Pinky_1
+    400038: Pinky_2
+    400040: Pinky_3
+    400042: Pinky_3_end
+    400044: Pinky_Control
+    400046: Pinky_Control_end
+    400048: Ring Control
+    400050: Ring Control_end
+    400052: Ring_1
+    400054: Ring_2
+    400056: Ring_3
+    400058: Ring_3_end
+    400060: Sun
+    400062: Thumb2
+    400064: Thumb_1
+    400066: Thumb_3
+    400068: Thumb_3_end
+    400070: ThumbControl
+    400072: ThumbControl_end
+    400074: Wrist
+    2000000: Camera
+    2100000: defaultMat.001
+    4300000: Group61280.002
+    7400000: Hand_Left.001|CameraAction
+    7400002: Hand_Left.001|Hand_LeftAction.002
+    7400004: Hand_Left.001|SunAction
+    9500000: //RootNode
+    10800000: Sun
+    13700000: Group61280.002
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
