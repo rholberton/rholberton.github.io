@@ -68,7 +68,7 @@
 				var onError = function () { };
 				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 				new THREE.MTLLoader()
-					.setPath( 'models/obj/male02/' )
+					.setPath( '../../data/data/' )
 					.load( 'obj-material-test.mtl', function ( materials ) {
 						materials.preload();
 						new THREE.OBJLoader()
