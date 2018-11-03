@@ -25,6 +25,8 @@
     <script src="js/loaders/OBJLoader.js"></script>
     <script src="js/loaders/MTLLoader.js"></script>
     <script src="js/loaders/DDSLoader.js"></script>
+    
+<!--    <script src="js/libs/stats.min.js"></script>-->
 
     <script src="js/libs/inflate.min.js"></script>
     <script src="js/loaders/FBXLoader.js"></script>
@@ -186,16 +188,16 @@
         ///////////////////////////////////////////////////////////
         
     
-        
-        ///////////////////////////////////////////////////////////
-        //add icosphere test from 3js playground
-        geometry = new THREE.IcosahedronGeometry(.3, 0); //edit scale (in this code a scale of 1 = size of target image)
-        var material	= new THREE.MeshNormalMaterial(); 
-        var mesh	= new THREE.Mesh( geometry, material );
-        mesh.position.y	= 0.5 //position y equals how far away from target 
-        arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
-        //end icosphere code
-        ///////////////////////////////////////////////////////////
+//        
+//        ///////////////////////////////////////////////////////////
+//        //add icosphere test from 3js playground
+//        geometry = new THREE.IcosahedronGeometry(.3, 0); //edit scale (in this code a scale of 1 = size of target image)
+//        var material	= new THREE.MeshNormalMaterial(); 
+//        var mesh	= new THREE.Mesh( geometry, material );
+//        mesh.position.y	= 0.5 //position y equals how far away from target 
+//        arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
+//        //end icosphere code
+//        ///////////////////////////////////////////////////////////
         
         
         ///////////////////////////////////////////////////////////
@@ -212,27 +214,27 @@
        ///////////////////////////////////////////////////////////
         
         
-        ///////////////////////////////////////////////////////////
-        // add a fbx model with animation
-        var loader = new THREE.FBXLoader();
-        loader.load( '../../data/data/handGLoptB.fbx', function ( object ) {
-            object.mixer = new THREE.AnimationMixer( object );
-            mixers.push( object.mixer );
-            var action = object.mixer.clipAction( object.animations[ 0 ] );
-            action.play();
-            object.traverse( function ( child ) {
-                if ( child.isMesh ) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            } );
-            object.scale.set(.02, .02, .02);
-            arWorldRoot.add( object );
-        } );
-        //end fbx code
-        ///////////////////////////////////////////////////////////
-        
-        
+//        ///////////////////////////////////////////////////////////
+//        // add a fbx model with animation
+//        var loader = new THREE.FBXLoader();
+//        loader.load( '../../data/data/handGLoptB.fbx', function ( object ) {
+//            object.mixer = new THREE.AnimationMixer( object );
+//            mixers.push( object.mixer );
+//            var action = object.mixer.clipAction( object.animations[ 0 ] );
+//            action.play();
+//            object.traverse( function ( child ) {
+//                if ( child.isMesh ) {
+//                    child.castShadow = true;
+//                    child.receiveShadow = true;
+//                }
+//            } );
+//            object.scale.set(.02, .02, .02);
+//            arWorldRoot.add( object );
+//        } );
+//        //end fbx code
+//        ///////////////////////////////////////////////////////////
+//        
+//        
         ///////////////////////////////////////////////////////////
          //add obj model (static)
          // obj texture from jpg
@@ -286,58 +288,38 @@
          //add obj model2 (static)
          // mtl texture
 
-				var onProgress = function ( xhr ) {
-					if ( xhr.lengthComputable ) {
-						var percentComplete = xhr.loaded / xhr.total * 100;
-						console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-					}
-				};
+        // model
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+            }
+        };
+        var onError = function () { };
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+        new THREE.MTLLoader()
+            .setPath( '../../data/data/' )
+            .load( 'obj-material-test.mtl', function ( materials ) {
+                materials.preload();
+                new THREE.OBJLoader()
+                    .setMaterials( materials )
+                    .setPath( '../../data/data/' )
+                    .load( 'obj-material-test.obj', function ( object ) {
+                        //object.scale.set(.4, .4, .4);
+                        arWorldRoot.add( object );
+                    }, onProgress, onError );
+            } );
         
-				var onError = function () { };
-				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-				new THREE.MTLLoader()
-					.setPath( 'models/obj/male02/' )
-					.load( 'male02_dds.mtl', function ( materials ) {
-						materials.preload();
-						new THREE.OBJLoader()
-							.setMaterials( materials )
-							.setPath( 'models/obj/male02/' )
-							.load( 'male02.obj', function ( object ) {
-								object.position.y = - 95;
-								scene.add( object );
-							}, onProgress, onError );
-					} );
-                
-        ///Load Material
-				var onError = function () { };
-				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-				new THREE.MTLLoader()
-					.setPath( '../../data/data/' )
-					.load( 'obj-material-test.mtl', function ( materials ) {
-						materials.preload();
-                    
-                    //Load Object
-						new THREE.OBJLoader()
-							.setMaterials( materials )
-							.setPath( '../../data/data/' )
-							.load( 'obj-material-test.obj', function ( object ) {
-					} );
-				//
- //					object.position.y = - 95;
- //					scene.add( object );
-             object.scale.set(4, 4, 4);
-             arWorldRoot.add( object );
 
-         }, onProgress, onError );
 
          //end obj2 code
         ///////////////////////////////////////////////////////////
         
         
-        
-        //////////FROM FBX IMPORT
-        stats = new Stats();
-        container.appendChild( stats.dom );
+//        
+//        //////////FROM FBX IMPORT
+//        stats = new Stats();
+//        container.appendChild( stats.dom );
         
 	//////////////////////////////////////////////////////////////////////////////////
 	//		render the whole thing on the page
