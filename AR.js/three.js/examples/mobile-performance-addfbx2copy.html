@@ -24,6 +24,7 @@
     
     <script src="js/loaders/OBJLoader.js"></script>
     <script src="js/loaders/MTLLoader.js"></script>
+    <script src="js/loaders/DDSLoader.js"></script>
 
     <script src="js/libs/inflate.min.js"></script>
     <script src="js/loaders/FBXLoader.js"></script>
@@ -285,35 +286,35 @@
          //add obj model2 (static)
          // mtl texture
 
-//         var manager = new THREE.LoadingManager();
-//         manager.onProgress = function ( item, loaded, total ) {
-//
-//             console.log( item, loaded, total );
-//
-//         };
-//                ///Load Material
-//				var onError = function () { };
-//				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-//				new THREE.MTLLoader()
-//					.setPath( '../../data/data/' )
-//					.load( 'obj-material-test.mtl', function ( materials ) {
-//						materials.preload();
-//                    //Load Object
-//						new THREE.OBJLoader()
-//							.setMaterials( materials )
-//							.setPath( '../../data/data/' )
-//							.load( 'obj-material-test.obj', function ( object ) {
-//								object.position.y = - 95;
-//								scene.add( object );
-//							}, onProgress, onError );
-//					} );
-//				//
-// //					object.position.y = - 95;
-// //					scene.add( object );
-//             object.scale.set(.02, .02, .02);
-//             arWorldRoot.add( object );
-//
-//         }, onProgress, onError );
+         var manager = new THREE.LoadingManager();
+         manager.onProgress = function ( item, loaded, total ) {
+
+             console.log( item, loaded, total );
+
+         };
+                ///Load Material
+				var onError = function () { };
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+				new THREE.MTLLoader()
+					.setPath( '../../data/data/' )
+					.load( 'obj-material-test.mtl', function ( materials ) {
+						materials.preload();
+                    //Load Object
+						new THREE.OBJLoader()
+							.setMaterials( materials )
+							.setPath( '../../data/data/' )
+							.load( 'obj-material-test.obj', function ( object ) {
+								object.position.y = - 95;
+								scene.add( object );
+							}, onProgress, onError );
+					} );
+				//
+ //					object.position.y = - 95;
+ //					scene.add( object );
+             object.scale.set(.02, .02, .02);
+             arWorldRoot.add( object );
+
+         }, onProgress, onError );
 
          //end obj2 code
         ///////////////////////////////////////////////////////////
