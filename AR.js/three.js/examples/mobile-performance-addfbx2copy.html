@@ -286,19 +286,36 @@
          //add obj model2 (static)
          // mtl texture
 
-         var manager = new THREE.LoadingManager();
-         manager.onProgress = function ( item, loaded, total ) {
-
-             console.log( item, loaded, total );
-
-         };
-                ///Load Material
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+					}
+				};
+        
+				var onError = function () { };
+				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+				new THREE.MTLLoader()
+					.setPath( 'models/obj/male02/' )
+					.load( 'male02_dds.mtl', function ( materials ) {
+						materials.preload();
+						new THREE.OBJLoader()
+							.setMaterials( materials )
+							.setPath( 'models/obj/male02/' )
+							.load( 'male02.obj', function ( object ) {
+								object.position.y = - 95;
+								scene.add( object );
+							}, onProgress, onError );
+					} );
+                
+        ///Load Material
 				var onError = function () { };
 				THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 				new THREE.MTLLoader()
 					.setPath( '../../data/data/' )
 					.load( 'obj-material-test.mtl', function ( materials ) {
 						materials.preload();
+                    
                     //Load Object
 						new THREE.OBJLoader()
 							.setMaterials( materials )
