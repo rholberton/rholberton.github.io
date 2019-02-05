@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style>
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<script src="http://threejsplaygnd.brangerbriz.net/js/three.min.js"></script>
+		<script src="http://threejsplaygnd.brangerbriz.net/js/Detector.js"></script>
+		
+		<!--Code Added from https://gist.github.com/nbriz/ab18e9862ee9a4c1badc-->
+		<script src="http://brangerbriz.net/labs/threejs_playGnd/js/AsciiEffect.js"></script>
+		<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			
+			var camera, scene, renderer;
+			var geometry, material, mesh;
+
+			function setup() {
+
+				var W = window.innerWidth, H = window.innerHeight;
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( W, H );
+				document.body.appendChild( renderer.domElement );
+				
+				//Code Added from https://gist.github.com/nbriz/ab18e9862ee9a4c1badc
+				//effect = new THREE.AsciiEffect( renderer );
+				//effect.setSize( W, H );
+				//document.body.appendChild( effect.domElement );
+
+				camera = new THREE.PerspectiveCamera( 50, W/H, 1, 10000 );
+				camera.position.z = 500;
+
+				scene = new THREE.Scene();
+				
+				
+				// paste your code from the geometryGUI here
+	geometry = new THREE.TorusGeometry(136.88, 50.61, 40, 11, 6.28);
+material = new THREE.MeshLambertMaterial({shading: THREE.FlatShading, color: 0xdcdcdc});
+mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+ambientLight = new THREE.AmbientLight( 0x000000 );
+scene.add( ambientLight );
+
+hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x000000, 0.2);
+scene.add( hemisphereLight );
+
+directionalLight = new THREE.DirectionalLight(0xffffff, 0.58);
+directionalLight.position.set( 0, 1, 0 );
+directionalLight.castShadow = true;
+scene.add( directionalLight );
+
+spotLight1 = new THREE.SpotLight( 0xffffff, 0.1 );
+spotLight1.position.set( -139.76, 1000, 100 );
+spotLight1.castShadow = true;
+spotLight1.shadowDarkness = 0.2;
+scene.add( spotLight1 );
+
+spotLight2 = new THREE.SpotLight( 0xffffff, 0.1 );
+spotLight2.position.set( 100, 1000, 100 );
+spotLight2.castShadow = true;
+spotLight2.shadowDarkness = 0.2;
+scene.add( spotLight2 );
+
+				
+
+
+			}
+
+			function draw() {
+
+				requestAnimationFrame( draw );
+				
+				// experiment with code from the snippets menu here
+
+				renderer.render( scene, camera );
+				
+				//Added from Ascii
+				//effect.render( scene, camera );
+
+			}
+
+			setup();
+			draw();
+
+		</script>
+		
+	</body>
+</html>
