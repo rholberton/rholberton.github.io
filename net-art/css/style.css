@@ -1,0 +1,24 @@
+/*
+CSS to apply different styles for: 
+body (entire page) 
+p (paragraph)
+h (headings) 
+see CSS color picker here for hex code: https://www.quackit.com/css/css_color_codes.cfm
+*/           
+
+body {
+background-color: #F5DEB3; /*sets the background color using hex*/
+}
+
+p { 
+color: rgb(1, 1, 1); /*sets paragraph text to black using rgb*/
+}
+
+h1 { 
+text-align: center;
+color: deeppink; /*paragraph text will be light cyan*/
+}
+
+h2 { 
+color: lightcyan; /*paragraph text will be light cyan*/
+}
