@@ -299,12 +299,14 @@
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
         new THREE.MTLLoader()
             .setPath( '../../data/data/' )
-            .load( 'obj-material-test2.mtl', function ( materials ) {
+            //.load( 'obj-material-test2.mtl', function ( materials ) {
+	    .load( 'vendingmachineblue.mtl', function ( materials ) {
                 materials.preload();
                 new THREE.OBJLoader()
                     .setMaterials( materials )
                     .setPath( '../../data/data/' )
-                    .load( 'obj-material-test2.obj', function ( object ) {
+                    //.load( 'obj-material-test2.obj', function ( object ) {
+		.load( 'vendingmachineblue.obj', function ( object ) {
                         object.scale.set(.4, .4, .4);
                         arWorldRoot.add( object );
                     }, onProgress, onError );
