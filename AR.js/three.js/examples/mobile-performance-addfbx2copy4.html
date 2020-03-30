@@ -298,15 +298,17 @@
         var onError = function () { };
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
         new THREE.MTLLoader()
-            .setPath( '../../data/data/' )
+            .setPath( '../../data/data/male02/' )
             //.load( 'obj-material-test2.mtl', function ( materials ) {
-	    .load( 'vendingmachineblue.mtl', function ( materials ) {
+	    //.load( 'vendingmachineblue.mtl', function ( materials ) {
+	    .load( 'male02.mtl', function ( materials ) {
                 materials.preload();
                 new THREE.OBJLoader()
                     .setMaterials( materials )
-                    .setPath( '../../data/data/' )
+                    .setPath( '../../data/data/male02/' )
                     //.load( 'obj-material-test2.obj', function ( object ) {
-		.load( 'vendingmachineblue.obj', function ( object ) {
+		    //.load( 'vendingmachineblue.obj', function ( object ) {
+		    .load( 'male02.obj', function ( object ) {
                         object.scale.set(.1, .1, .1);
                         arWorldRoot.add( object );
                     }, onProgress, onError );
