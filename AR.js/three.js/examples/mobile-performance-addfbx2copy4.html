@@ -288,28 +288,28 @@
         
          ///////////////////////////////////////////////////////////
          //add obj model2 (static) with material textures
-
+	//!!!!****** FILE NAMES CAN NOT HAVE CHARACTERS (NO DASHES OR UNDERSCORES) ******!!!!!!!!
+	    
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
                 console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
             }
         };
+	    
         var onError = function () { };
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-        new THREE.MTLLoader()
+        
+	    new THREE.MTLLoader()
             .setPath( '../../data/data/' )
-            //.load( 'obj-material-test2.mtl', function ( materials ) {
-	    //.load( 'vendingmachineblue.mtl', function ( materials ) {
-	    .load( 'mtltest2.mtl', function ( materials ) {
+	    .load( 'mtltest3.mtl', function ( materials ) {
                 materials.preload();
-                new THREE.OBJLoader()
+                
+		new THREE.OBJLoader()
                     .setMaterials( materials )
                     .setPath( '../../data/data/' )
-                    //.load( 'obj-material-test2.obj', function ( object ) {
-		    //.load( 'vendingmachineblue.obj', function ( object ) {
-		    .load( 'mtltest2.obj', function ( object ) {
-                        object.scale.set(.5, .5, .5);
+		    .load( 'mtltest3.obj', function ( object ) {
+                        object.scale.set(.25, .25, .25);
                         arWorldRoot.add( object );
                     }, onProgress, onError );
             } );
