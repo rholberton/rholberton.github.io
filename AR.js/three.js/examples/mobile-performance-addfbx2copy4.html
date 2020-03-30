@@ -308,15 +308,15 @@
 	// manager.addHandler( /\.tga$/i, new TGALoader() );
 
 	new MTLLoader( manager )
-		.setPath( '../../data/data/male02' )
-		.load( 'male02_dds.mtl', function ( materials ) {
+		.setPath( '../../data/data/' )
+		.load( 'obj-mtl-test.mtl', function ( materials ) {
 
 			materials.preload();
 
 			new OBJLoader( manager )
 				.setMaterials( materials )
-				.setPath( '../../data/data/male02' )
-				.load( 'male02.obj', function ( object ) {
+				.setPath( '../../data/data/' )
+				.load( 'obj-mtl-test.obj', function ( object ) {
 
 					object.position.y = - 95;
 					scene.add( object );
