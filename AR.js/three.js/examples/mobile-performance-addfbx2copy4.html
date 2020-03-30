@@ -301,15 +301,15 @@
             .setPath( '../../data/data/' )
             //.load( 'obj-material-test2.mtl', function ( materials ) {
 	    //.load( 'vendingmachineblue.mtl', function ( materials ) {
-	    .load( 'objMtlTest2.obj', function ( materials ) {
+	    .load( 'omtltest2.obj.obj', function ( materials ) {
                 materials.preload();
                 new THREE.OBJLoader()
                     .setMaterials( materials )
                     .setPath( '../../data/data/' )
                     //.load( 'obj-material-test2.obj', function ( object ) {
 		    //.load( 'vendingmachineblue.obj', function ( object ) {
-		    .load( 'objMtlTest2.obj', function ( object ) {
-                        object.scale.set(.25, .25, .25);
+		    .load( 'mtltest2.obj', function ( object ) {
+                        object.scale.set(.5, .5, .5);
                         arWorldRoot.add( object );
                     }, onProgress, onError );
             } );
