@@ -319,7 +319,8 @@
 				.load( 'obj-mtl-test.obj', function ( object ) {
 
 					object.position.y = - 95;
-					scene.add( object );
+					object.scale.set(.02, .02, .02);
+					arWorldRoot.add( object );
 
 				}, onProgress, onError );
 
