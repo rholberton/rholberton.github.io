@@ -297,13 +297,13 @@
         var onError = function () { };
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
         new THREE.MTLLoader()
-            .setPath( '../../data/data/' )
+            .setPath( '../../data/data//male02' )
             .load( 'male02_dds.mtl', function ( materials ) {
 	    //.load( 'vendingmachineblue.mtl', function ( materials ) {
                 materials.preload();
                 new THREE.OBJLoader()
                     .setMaterials( materials )
-                    .setPath( '../../data/data/' )
+                    .setPath( '../../data/data/male02' )
                     .load( 'male02.obj', function ( object ) {
 		    //.load( 'vendingmachineblue.obj', function ( object ) {
                         object.scale.set(.4, .4, .4);
