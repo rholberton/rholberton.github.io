@@ -238,83 +238,83 @@
         
         
         ///////////////////////////////////////////////////////////
-         //add obj model (static)
-         // obj texture from jpg
+//          //add obj model (static)
+//          // obj texture from jpg
 
-         var manager = new THREE.LoadingManager();
-         manager.onProgress = function ( item, loaded, total ) {
+//          var manager = new THREE.LoadingManager();
+//          manager.onProgress = function ( item, loaded, total ) {
 
-             console.log( item, loaded, total );
+//              console.log( item, loaded, total );
 
-         };
+//          };
 
-         var textureLoader = new THREE.TextureLoader( manager );
-         var texture = textureLoader.load( '../../data/data/cheetah.jpeg' );
+//          var textureLoader = new THREE.TextureLoader( manager );
+//          var texture = textureLoader.load( '../../data/data/cheetah.jpeg' );
 
-         // obj model
-         var onProgress = function ( xhr ) {
-             if ( xhr.lengthComputable ) {
-                 var percentComplete = xhr.loaded / xhr.total * 100;
-                 console.log( Math.round(percentComplete, 2) + '% downloaded' );
-             }
-         };
+//          // obj model
+//          var onProgress = function ( xhr ) {
+//              if ( xhr.lengthComputable ) {
+//                  var percentComplete = xhr.loaded / xhr.total * 100;
+//                  console.log( Math.round(percentComplete, 2) + '% downloaded' );
+//              }
+//          };
 
-         var onError = function ( xhr ) {
-         };
+//          var onError = function ( xhr ) {
+//          };
 
-         var loader = new THREE.OBJLoader( manager );
-         loader.load( '../../data/data/male02/male02.obj', function ( object ) {
+//          var loader = new THREE.OBJLoader( manager );
+//          loader.load( '../../data/data/male02/male02.obj', function ( object ) {
 
-             object.traverse( function ( child ) {
+//              object.traverse( function ( child ) {
 
-                 if ( child instanceof THREE.Mesh ) {
+//                  if ( child instanceof THREE.Mesh ) {
 
-                     child.material.map = texture;
+//                      child.material.map = texture;
 
-                 }
+//                  }
 
-             } );
+//              } );
 
- //					object.position.y = - 95;
- //					scene.add( object );
-             object.scale.set(.02, .02, .02);
-             arWorldRoot.add( object );
+//  //					object.position.y = - 95;
+//  //					scene.add( object );
+//              object.scale.set(.02, .02, .02);
+//              arWorldRoot.add( object );
 
-         }, onProgress, onError );
+//          }, onProgress, onError );
 
-         //end obj code
-        ///////////////////////////////////////////////////////////
+//          //end obj code
+//         ///////////////////////////////////////////////////////////
         
         
          ///////////////////////////////////////////////////////////
-         //add obj model2 (static) with material textures
+//          //add obj model2 (static) with material textures
 
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-            }
-        };
-        var onError = function () { };
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-        new THREE.MTLLoader()
-            .setPath( '../../data/data/' )
-            //.load( 'obj-material-test2.mtl', function ( materials ) {
-	    .load( 'vendingmachineblue.mtl', function ( materials ) {
-                materials.preload();
-                new THREE.OBJLoader()
-                    .setMaterials( materials )
-                    .setPath( '../../data/data/' )
-                    //.load( 'obj-material-test2.obj', function ( object ) {
-		.load( 'vendingmachineblue.obj', function ( object ) {
-                        object.scale.set(.1, .1, .1);
-                        arWorldRoot.add( object );
-                    }, onProgress, onError );
-            } );
+//         var onProgress = function ( xhr ) {
+//             if ( xhr.lengthComputable ) {
+//                 var percentComplete = xhr.loaded / xhr.total * 100;
+//                 console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+//             }
+//         };
+//         var onError = function () { };
+//         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+//         new THREE.MTLLoader()
+//             .setPath( '../../data/data/' )
+//             //.load( 'obj-material-test2.mtl', function ( materials ) {
+// 	    .load( 'vendingmachineblue.mtl', function ( materials ) {
+//                 materials.preload();
+//                 new THREE.OBJLoader()
+//                     .setMaterials( materials )
+//                     .setPath( '../../data/data/' )
+//                     //.load( 'obj-material-test2.obj', function ( object ) {
+// 		.load( 'vendingmachineblue.obj', function ( object ) {
+//                         object.scale.set(.1, .1, .1);
+//                         arWorldRoot.add( object );
+//                     }, onProgress, onError );
+//             } );
         
 
 
-         //end obj2 code
+//          //end obj2 code
         ///////////////////////////////////////////////////////////
         
         
