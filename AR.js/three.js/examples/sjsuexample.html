@@ -175,15 +175,15 @@
         
 //        ///////////////////////////////////////////////////////////
 //        // add a static cube
-        geometry = new THREE.CubeGeometry(1,1,1);
-        material = new THREE.MeshNormalMaterial({
-            transparent : true,
-            opacity: 0.5,
-            side: THREE.DoubleSide
-        }); 
-        mesh = new THREE.Mesh( geometry, material );
-        mesh.position.y	= geometry.parameters.height/2
-        arWorldRoot.add(mesh);
+//         geometry = new THREE.CubeGeometry(1,1,1);
+//         material = new THREE.MeshNormalMaterial({
+//             transparent : true,
+//             opacity: 0.5,
+//             side: THREE.DoubleSide
+//         }); 
+//         mesh = new THREE.Mesh( geometry, material );
+//         mesh.position.y	= geometry.parameters.height/2
+//         arWorldRoot.add(mesh);
 //        // end cube code
 //        ///////////////////////////////////////////////////////////
         
@@ -193,26 +193,26 @@
         //icosphere: example from from 3js playground 
         //add the geometry, material, and mesh lines from the 3js GUI
         //MAKE SURE SCALE IS 1 (a scale of 1 will mean your object is as big as the image target)
-        geometry = new THREE.CubeGeometry(1, 1, 1);
-        material = new THREE.MeshNormalMaterial({shading: THREE.FlatShading});
-        mesh = new THREE.Mesh(geometry, material);
+//         geometry = new THREE.CubeGeometry(1, 1, 1);
+//         material = new THREE.MeshNormalMaterial({shading: THREE.FlatShading});
+//         mesh = new THREE.Mesh(geometry, material);
         
-        //Keep these lines
-        mesh.position.y	= 0.5 //position y equals how far away from target 
-        arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
+//         //Keep these lines
+//         mesh.position.y	= 0.5 //position y equals how far away from target 
+//         arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
         //end icosphere code
         ///////////////////////////////////////////////////////////
         
         
         /////////////////////////////////////////////////////////
         // add a taurus with rotation animation
-        geometry = new THREE.TorusKnotGeometry(0.3,0.1,64,16);
-        material = new THREE.MeshNormalMaterial(); 
-        mesh = new THREE.Mesh( geometry, material );
-        mesh.position.y	= 0.5
-        arWorldRoot.add( mesh );
-        onRenderFcts.push(function(){
-            mesh.rotation.x += 0.1
+//         geometry = new THREE.TorusKnotGeometry(0.3,0.1,64,16);
+//         material = new THREE.MeshNormalMaterial(); 
+//         mesh = new THREE.Mesh( geometry, material );
+//         mesh.position.y	= 0.5
+//         arWorldRoot.add( mesh );
+//         onRenderFcts.push(function(){
+//             mesh.rotation.x += 0.1
         })
         // end taurus code
        /////////////////////////////////////////////////////////
@@ -243,46 +243,46 @@
          //add obj model (static)
          // obj texture from jpg
 
-         var manager = new THREE.LoadingManager();
-         manager.onProgress = function ( item, loaded, total ) {
+//          var manager = new THREE.LoadingManager();
+//          manager.onProgress = function ( item, loaded, total ) {
 
-             console.log( item, loaded, total );
+//              console.log( item, loaded, total );
 
-         };
+//          };
 
-         var textureLoader = new THREE.TextureLoader( manager );
-         var texture = textureLoader.load( '../../data/data/cheetah.jpeg' );
+//          var textureLoader = new THREE.TextureLoader( manager );
+//          var texture = textureLoader.load( '../../data/data/cheetah.jpeg' );
 
-         // obj model
-         var onProgress = function ( xhr ) {
-             if ( xhr.lengthComputable ) {
-                 var percentComplete = xhr.loaded / xhr.total * 100;
-                 console.log( Math.round(percentComplete, 2) + '% downloaded' );
-             }
-         };
+//          // obj model
+//          var onProgress = function ( xhr ) {
+//              if ( xhr.lengthComputable ) {
+//                  var percentComplete = xhr.loaded / xhr.total * 100;
+//                  console.log( Math.round(percentComplete, 2) + '% downloaded' );
+//              }
+//          };
 
-         var onError = function ( xhr ) {
-         };
+//          var onError = function ( xhr ) {
+//          };
 
-         var loader = new THREE.OBJLoader( manager );
-         loader.load( '../../data/data/male02/male02.obj', function ( object ) {
+//          var loader = new THREE.OBJLoader( manager );
+//          loader.load( '../../data/data/male02/male02.obj', function ( object ) {
 
-             object.traverse( function ( child ) {
+//              object.traverse( function ( child ) {
 
-                 if ( child instanceof THREE.Mesh ) {
+//                  if ( child instanceof THREE.Mesh ) {
 
-                     child.material.map = texture;
+//                      child.material.map = texture;
 
-                 }
+//                  }
 
-             } );
+//              } );
 
- //					object.position.y = - 95;
- //					scene.add( object );
-             object.scale.set(.02, .02, .02);
-             arWorldRoot.add( object );
+//  //					object.position.y = - 95;
+//  //					scene.add( object );
+//              object.scale.set(.02, .02, .02);
+//              arWorldRoot.add( object );
 
-         }, onProgress, onError );
+//          }, onProgress, onError );
 
          //end obj code
         ///////////////////////////////////////////////////////////
@@ -292,29 +292,29 @@
          //add obj model2 (static) with material textures
 	//!!!!****** FILE NAMES CAN NOT HAVE CHARACTERS (NO DASHES OR UNDERSCORES) ******!!!!!!!!
 	    
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-            }
-        };
+//         var onProgress = function ( xhr ) {
+//             if ( xhr.lengthComputable ) {
+//                 var percentComplete = xhr.loaded / xhr.total * 100;
+//                 console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+//             }
+//         };
 	    
-        var onError = function () { };
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+//         var onError = function () { };
+//         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
         
-	    new THREE.MTLLoader()
-            .setPath( '../../data/data/' )
-	    .load( 'mtltest3.mtl', function ( materials ) {
-                materials.preload();
+// 	    new THREE.MTLLoader()
+//             .setPath( '../../data/data/' )
+// 	    .load( 'mtltest3.mtl', function ( materials ) {
+//                 materials.preload();
                 
-		new THREE.OBJLoader()
-                    .setMaterials( materials )
-                    .setPath( '../../data/data/' )
-		    .load( 'mtltest3.obj', function ( object ) {
-                        object.scale.set(.25, .25, .25);
-                        arWorldRoot.add( object );
-                    }, onProgress, onError );
-            } );
+// 		new THREE.OBJLoader()
+//                     .setMaterials( materials )
+//                     .setPath( '../../data/data/' )
+// 		    .load( 'mtltest3.obj', function ( object ) {
+//                         object.scale.set(.25, .25, .25);
+//                         arWorldRoot.add( object );
+//                     }, onProgress, onError );
+//             } );
         
 
 
