@@ -219,21 +219,21 @@
         
         ///////////////////////////////////////////////////////////
         // add a fbx model with animation
-//        var loader = new THREE.FBXLoader();
-//        loader.load( '../../data/data/fbxexporttestspheres2.fbx', function ( object ) {
-//            object.mixer = new THREE.AnimationMixer( object );
-//            mixers.push( object.mixer );
-//            var action = object.mixer.clipAction( object.animations[ 0 ] );
-//            action.play();
-//            object.traverse( function ( child ) {
-//                if ( child.isMesh ) {
-//                    child.castShadow = true;
-//                    child.receiveShadow = true;
-//                }
-//            } );
-//            object.scale.set(.02, .02, .02);
-//            arWorldRoot.add( object );
-//        } );
+        var loader = new THREE.FBXLoader();
+        loader.load( '../../data/data/fbxexporttestspheres2.fbx', function ( object ) {
+            object.mixer = new THREE.AnimationMixer( object );
+            mixers.push( object.mixer );
+            var action = object.mixer.clipAction( object.animations[ 0 ] );
+            action.play();
+            object.traverse( function ( child ) {
+                if ( child.isMesh ) {
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            } );
+            object.scale.set(.02, .02, .02);
+            arWorldRoot.add( object );
+        } );
         //end fbx code
         ///////////////////////////////////////////////////////////
         
