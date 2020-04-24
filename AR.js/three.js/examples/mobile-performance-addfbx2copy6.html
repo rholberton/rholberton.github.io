@@ -219,7 +219,7 @@
         ///////////////////////////////////////////////////////////
         // add a fbx model with animation
         var loader = new THREE.FBXLoader();
-        loader.load( '../../data/data/fbxexporttesttwosphere.fbx', function ( object ) {
+        loader.load( '../../data/data/fbxexporttestspheres2.fbx', function ( object ) {
             object.mixer = new THREE.AnimationMixer( object );
             mixers.push( object.mixer );
             var action = object.mixer.clipAction( object.animations[ 0 ] );
