@@ -197,7 +197,7 @@
         
         //Keep these lines
         mesh.position.y	= 0.5 //position y equals how far away from target 
-        arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
+        //arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
         //end icosphere code
         ///////////////////////////////////////////////////////////
         
@@ -208,7 +208,7 @@
         material = new THREE.MeshNormalMaterial(); 
         mesh = new THREE.Mesh( geometry, material );
         mesh.position.y	= 0.5
-        arWorldRoot.add( mesh );
+        //arWorldRoot.add( mesh );
         onRenderFcts.push(function(){
             mesh.rotation.x += 0.1
         })
