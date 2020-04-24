@@ -138,7 +138,7 @@
         })
         ////////////////////////////////////////////////////////////////////////////////
     //          Create a ArMarkerControls
-        //        Tutorial to make your own target image pattern: https://medium.com/arjs/how-to-create-your-own-marker-44becbec1105
+        //        Tutorial to make your own target image pattern: https://rholberton.github.io/AR.js/three.js/examples/marker-training/examples/generator.html
         //        More Help/Known problems with cutom images: https://github.com/jeromeetienne/AR.js/issues/366
         ////////////////////////////////////////////////////////////////////////////////
         var markerRoot = new THREE.Group
@@ -150,6 +150,7 @@
             ////////////////////////////////////////////////////////////////////////////////
             patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
             // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
+            // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patternmarkerAR.patt' //this example was made using the pattern maker linked above
         })
         // build smoothedControls
         var smoothedRoot = new THREE.Group()
@@ -181,7 +182,7 @@
         }); 
         mesh = new THREE.Mesh( geometry, material );
         mesh.position.y	= geometry.parameters.height/2
-        //arWorldRoot.add(mesh);
+        arWorldRoot.add(mesh);
 //        // end cube code
 //        ///////////////////////////////////////////////////////////
         
