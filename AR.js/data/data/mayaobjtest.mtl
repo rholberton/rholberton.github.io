@@ -1,0 +1,17 @@
+newmtl pSphere1SG
+illum 4
+Kd 0.00 1.00 0.44
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 4.31
+newmtl pSphere2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd walk_cycle_example_male.28.1ContactR.jpg
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00

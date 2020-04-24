@@ -218,21 +218,21 @@
         
         ///////////////////////////////////////////////////////////
         // add a fbx model with animation
-        var loader = new THREE.FBXLoader();
-        loader.load( '../../data/data/fbxexporttestspheres2.fbx', function ( object ) {
-            object.mixer = new THREE.AnimationMixer( object );
-            mixers.push( object.mixer );
-            var action = object.mixer.clipAction( object.animations[ 0 ] );
-            action.play();
-            object.traverse( function ( child ) {
-                if ( child.isMesh ) {
-                    child.castShadow = true;
-                    child.receiveShadow = true;
-                }
-            } );
-            object.scale.set(.02, .02, .02);
-            arWorldRoot.add( object );
-        } );
+//        var loader = new THREE.FBXLoader();
+//        loader.load( '../../data/data/fbxexporttestspheres2.fbx', function ( object ) {
+//            object.mixer = new THREE.AnimationMixer( object );
+//            mixers.push( object.mixer );
+//            var action = object.mixer.clipAction( object.animations[ 0 ] );
+//            action.play();
+//            object.traverse( function ( child ) {
+//                if ( child.isMesh ) {
+//                    child.castShadow = true;
+//                    child.receiveShadow = true;
+//                }
+//            } );
+//            object.scale.set(.02, .02, .02);
+//            arWorldRoot.add( object );
+//        } );
         //end fbx code
         ///////////////////////////////////////////////////////////
         
@@ -290,31 +290,31 @@
 //         //add obj model2 (static) with material textures
 //	//!!!!****** FILE NAMES CAN NOT HAVE CHARACTERS (NO DASHES OR UNDERSCORES) ******!!!!!!!!
 //	    
-//        var onProgress = function ( xhr ) {
-//            if ( xhr.lengthComputable ) {
-//                var percentComplete = xhr.loaded / xhr.total * 100;
-//                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-//            }
-//        };
-//	    
-//        var onError = function () { };
-//        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-//        
-//	    new THREE.MTLLoader()
-//            .setPath( '../../data/data/' )
-//	    .load( 'mtltest3.mtl', function ( materials ) {
-//                materials.preload();
-//                
-//		new THREE.OBJLoader()
-//                    .setMaterials( materials )
-//                    .setPath( '../../data/data/' )
-//		    .load( 'mtltest3.obj', function ( object ) {
-//                        object.scale.set(.25, .25, .25);
-//                        arWorldRoot.add( object );
-//                    }, onProgress, onError );
-//            } );
-//        
-//
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
+            }
+        };
+	    
+        var onError = function () { };
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+        
+	    new THREE.MTLLoader()
+            .setPath( '../../data/data/' )
+	    .load( 'mayaobjtest.mtl', function ( materials ) {
+                materials.preload();
+                
+		new THREE.OBJLoader()
+                    .setMaterials( materials )
+                    .setPath( '../../data/data/' )
+		    .load( 'mayaobjtest.obj', function ( object ) {
+                        object.scale.set(.25, .25, .25);
+                        arWorldRoot.add( object );
+                    }, onProgress, onError );
+            } );
+        
+
 //
 //         //end obj2 code
 //        ///////////////////////////////////////////////////////////
