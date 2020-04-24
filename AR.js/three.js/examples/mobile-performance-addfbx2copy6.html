@@ -219,7 +219,7 @@
         ///////////////////////////////////////////////////////////
         // add a fbx model with animation
         var loader = new THREE.FBXLoader();
-        loader.load( '../../data/data/fbxexporttesttwosphere.fbx', function ( object ) {
+        loader.load( '../../data/data/handGLoptB.fbx', function ( object ) {
             object.mixer = new THREE.AnimationMixer( object );
             mixers.push( object.mixer );
             var action = object.mixer.clipAction( object.animations[ 0 ] );
@@ -230,7 +230,7 @@
                     child.receiveShadow = true;
                 }
             } );
-            object.scale.set(1, 1, 1);
+            object.scale.set(.02, .02, .02);
             arWorldRoot.add( object );
         } );
         //end fbx code
