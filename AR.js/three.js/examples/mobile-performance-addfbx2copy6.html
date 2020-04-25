@@ -188,30 +188,16 @@
         
     
         
-        ///////////////////////////////////////////////////////////
-        //icosphere: example from from 3js playground 
-        //add the geometry, material, and mesh lines from the 3js GUI
-        //MAKE SURE SCALE IS 1 (a scale of 1 will mean your object is as big as the image target)
-        geometry = new THREE.CubeGeometry(1, 1, 1);
-        material = new THREE.MeshNormalMaterial({shading: THREE.FlatShading});
-        mesh = new THREE.Mesh(geometry, material);
-        
-        //Keep these lines
-        mesh.position.y	= 0.5 //position y equals how far away from target 
-        //arWorldRoot.add( mesh ); //instead of adding mesh to the scene right away we add only when the target is detected
-        //end icosphere code
-        ///////////////////////////////////////////////////////////
-        
-        
         /////////////////////////////////////////////////////////
         // add a taurus with rotation animation
         geometry = new THREE.TorusKnotGeometry(0.3,0.1,64,16);
         material = new THREE.MeshNormalMaterial(); 
         mesh = new THREE.Mesh( geometry, material );
         mesh.position.y	= 0.5
-        //arWorldRoot.add( mesh );
+        mesh.position.x	= 1
+        arWorldRoot.add( mesh );
         onRenderFcts.push(function(){
-            mesh.rotation.x += 0.1
+        mesh.rotation.x += 0.1
         })
         // end taurus code
        /////////////////////////////////////////////////////////
@@ -220,7 +206,8 @@
         ///////////////////////////////////////////////////////////
         // add a fbx model with animation
         var loader = new THREE.FBXLoader();
-        loader.load( '../../data/data/fbxexporttestspheres4.fbx', function ( object ) {
+        loader.load( '../../data/data/handGLoptB.fbx', function ( object ) { //hand animation created with rig
+        //loader.load( '../../data/data/fbxexporttestspherecube3blender1.fbx', function ( object ) {
             object.mixer = new THREE.AnimationMixer( object );
             mixers.push( object.mixer );
             var action = object.mixer.clipAction( object.animations[ 0 ] );
@@ -232,6 +219,7 @@
                 }
             } );
             object.scale.set(.02, .02, .02);
+            object.position.x = -1
             arWorldRoot.add( object );
         } );
         //end fbx code
@@ -279,18 +267,21 @@
  //					object.position.y = - 95;
  //					scene.add( object );
              object.scale.set(.02, .02, .02);
+             object.position.z	= -1
              arWorldRoot.add( object );
 
          }, onProgress, onError );
-//
-//         //end obj code
-//        ///////////////////////////////////////////////////////////
-//        
-//        
-//         ///////////////////////////////////////////////////////////
-//         //add obj model2 (static) with material textures
-//	//!!!!****** FILE NAMES CAN NOT HAVE CHARACTERS (NO DASHES OR UNDERSCORES) ******!!!!!!!!
-//	    
+
+         //end obj code
+        ///////////////////////////////////////////////////////////
+        
+        
+        ///////////////////////////////////////////////////////////
+        //add obj model2 (static) with material textures
+	    //!!!!****** FILE NAMES CAN NOT HAVE CHARACTERS (NO DASHES OR UNDERSCORES) ******!!!!!!!!
+        //!!!!****** IMAGE TEXTURES DON'T WORK USE CODE ABOVE TO USE .JPG IMAGE TEXTURE ******!!!!!!!!
+        //!!!!****** MAYA OR BLENDER NATIVE MATERIALS ONLY (NO ARNOLD OR CYCLES) ******!!!!!!!!
+	    
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
@@ -303,17 +294,21 @@
         
 	    new THREE.MTLLoader()
             .setPath( '../../data/data/' )
-	    .load( 'mayaobjtest2.mtl', function ( materials ) {
+	    .load( 'objFromMaya.mtl', function ( materials ) {
                 materials.preload();
                 
-		new THREE.OBJLoader()
-                    .setMaterials( materials )
-                    .setPath( '../../data/data/' )
-		    .load( 'mayaobjtest2.obj', function ( object ) {
-                        object.scale.set(.25, .25, .25);
-                        arWorldRoot.add( object );
-                    }, onProgress, onError );
-            } );
+            new THREE.OBJLoader()
+            .setMaterials( materials )
+            .setPath( '../../data/data/' )
+            
+		    .load( 'objFromMaya.obj', function ( object ) {
+                object.scale.set(.25, .25, .25);
+                object.position.z	= 1.2;
+                object.position.x	= -.7;
+                object.rotation.y = 80;
+                arWorldRoot.add( object );
+            }, onProgress, onError );
+        } );
         
 
 //

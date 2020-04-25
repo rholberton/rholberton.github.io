@@ -102,8 +102,9 @@
 
 				// model
 				var loader = new THREE.FBXLoader();
-				loader.load( '../../data/data/Samba Dancing.fbx', function ( object ) {
-//object.scale (.1, .1, .1);
+                
+                loader.load( '../../data/data/pinksphere.fbx', function ( object ) {
+
 					object.mixer = new THREE.AnimationMixer( object );
 					mixers.push( object.mixer );
 
@@ -120,10 +121,12 @@
 						}
 
 					} );
-                    object.scale.set(1, 1, 1);
+                    object.scale.set(10, 10, 10);
 					scene.add( object );
 
 				} );
+                
+                
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
