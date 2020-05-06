@@ -150,9 +150,8 @@
             //   Add your custom image here and comment out existing file (hiro or kanji)
             ////////////////////////////////////////////////////////////////////////////////
             patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
-            //patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
-            //patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patternmarkerAR.patt'  //this example was made using the pattern maker linked above
-            //patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patternhouseicon.patt' //this example was made using the pattern maker linked above
+            // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
+            // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patternmarkerAR.patt' //this example was made using the pattern maker linked above
         })
         // build smoothedControls
         var smoothedRoot = new THREE.Group()
@@ -174,8 +173,8 @@
         var arWorldRoot = smoothedRoot;
         var geometry, material, mesh;
         
-        ///////////////////////////////////////////////////////////
-        // add a static cube
+//        ///////////////////////////////////////////////////////////
+//        // add a static cube
         geometry = new THREE.CubeGeometry(1,1,1);
         material = new THREE.MeshNormalMaterial({
             transparent : true,
@@ -185,8 +184,8 @@
         mesh = new THREE.Mesh( geometry, material );
         mesh.position.y	= geometry.parameters.height/2
         arWorldRoot.add(mesh);
-        // end cube code
-        ///////////////////////////////////////////////////////////
+//        // end cube code
+//        ///////////////////////////////////////////////////////////
         
     
         
@@ -266,12 +265,11 @@
 
              } );
 
+ //					object.position.y = - 95;
+ //					scene.add( object );
              object.scale.set(.02, .02, .02);
              object.position.z	= -1
              arWorldRoot.add( object );
-                 onRenderFcts.push(function(){
-                    object.rotation.y += 0.1
-                })
 
          }, onProgress, onError );
 
@@ -322,17 +320,25 @@
                 arWorldRoot.add( object );
             }, onProgress, onError );
         } );
+        
 
-         //end obj2 code
-        ///////////////////////////////////////////////////////////
+//
+//         //end obj2 code
+//        ///////////////////////////////////////////////////////////
+   
+        
+
+        
+               
+        
         
         //////////FROM FBX IMPORT
         stats = new Stats();
         container.appendChild( stats.dom );
         
-        //////////////////////////////////////////////////////////////////////////////////
-        //		render the whole thing on the page
-        //////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+	//		render the whole thing on the page
+	//////////////////////////////////////////////////////////////////////////////////
 	
         var stats2 = new Stats();
         document.body.appendChild( stats2.dom );
@@ -357,7 +363,7 @@
             })
         })
         
-        animate();
+    animate();
         
         function animate() {
 				requestAnimationFrame( animate );
