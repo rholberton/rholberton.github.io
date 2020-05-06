@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 <title>AR on the web for SJSU</title>
@@ -296,6 +297,7 @@
             .setPath( '../../data/data/' )
 	    .load( 'objFromMaya.mtl', function ( materials ) {
                 materials.preload();
+
                 
             new THREE.OBJLoader()
             .setMaterials( materials )
@@ -306,6 +308,15 @@
                 object.position.z	= 1.2;
                 object.position.x	= -.7;
                 object.rotation.y = 80;
+                
+                object.traverse((node) => {
+                    if (node.material) {
+                        node.material.transparent = true;
+                        node.material.opacity = 0.5;
+                        node.material.depthWrite = false;  // not node.depthWrite
+                    }
+                });
+                
                 arWorldRoot.add( object );
             }, onProgress, onError );
         } );
@@ -314,7 +325,11 @@
 //
 //         //end obj2 code
 //        ///////////////////////////////////////////////////////////
-//        
+   
+        
+
+        
+               
         
         
         //////////FROM FBX IMPORT
