@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 2629051045
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5d2ea4cc0d589f27743ac25808220352
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5408f8b32a4d5acadb3972c17d23aafb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/CylinderTeal.prefab
+- Assets/Prefabs/SkyCube.prefab
+Dependencies: []
