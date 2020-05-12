@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 3484012103
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ce734c47d6107b3798e6aece1276dec9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9b42710ff261ef8d2c5aa6ee13b9d19c
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+Assets:
+- Assets/Prefabs/Skull.prefab
+Dependencies: []
