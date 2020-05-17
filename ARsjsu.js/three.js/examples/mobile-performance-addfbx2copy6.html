@@ -181,7 +181,7 @@
         }); 
         mesh = new THREE.Mesh( geometry, material );
         mesh.position.y	= geometry.parameters.height/2
-//        arWorldRoot.add(mesh);
+        arWorldRoot.add(mesh);
 //        // end cube code
 //        ///////////////////////////////////////////////////////////
         
@@ -219,7 +219,7 @@
             } );
             object.scale.set(.02, .02, .02);
             object.position.x = -1
-//            arWorldRoot.add( object );
+            arWorldRoot.add( object );
         } );
         //end fbx code
         ///////////////////////////////////////////////////////////
@@ -293,7 +293,7 @@
         
 	    new THREE.MTLLoader()
             .setPath( '../../data/data/' )
-	    .load( 'objFromMaya.mtl', function ( materials ) {
+	    .load( 'papa1.mtl', function ( materials ) {
                 materials.preload();
 
                 
@@ -301,7 +301,7 @@
             .setMaterials( materials )
             .setPath( '../../data/data/' )
             
-		    .load( 'objFromMaya.obj', function ( object ) {
+		    .load( 'papa1.obj', function ( object ) {
                 object.scale.set(.25, .25, .25);
                 object.position.z	= 1.2;
                 object.position.x	= -.7;
@@ -339,7 +339,7 @@
         
 	    new THREE.MTLLoader()
             .setPath( '../../data/data/' )
-	    .load( 'objFromMaya.mtl', function ( materials ) {
+	    .load( 'papa2.mtl', function ( materials ) {
                 materials.preload();
 
                 
@@ -347,7 +347,7 @@
             .setMaterials( materials )
             .setPath( '../../data/data/' )
             
-		    .load( 'objFromMaya.obj', function ( object ) {
+		    .load( 'papa2.obj', function ( object ) {
                 object.scale.set(.25, .25, .25);
                 object.position.z	= -1.2;
                 object.position.x	= -.7;
