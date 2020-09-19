@@ -1,0 +1,57 @@
+<!--https://carto.com/developers/fundamentals/getting-started/-->
+
+<html>
+  <head>
+    <title>CARTO VL Example</title>
+    <!-- Load CARTO VL JS -->
+    <script src="https://libs.cartocdn.com/carto-vl/v1.2.4/carto-vl.min.js"></script>
+    <!-- Load Mapbox GL -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css" rel="stylesheet">
+
+    <!-- Your style will go here -->
+    <style>
+      #map {
+        position: absolute;
+        width: 100%;
+        height: 100%
+      }
+    </style>
+  </head>
+  
+  <body>
+    <!-- Your map will go here -->
+    <div id="map"></div>
+    <script>
+//Load CARTO's Voyager basemap centered on the world at zoom level 2
+      const map = new mapboxgl.Map({
+        container: 'map',
+//        style: carto.basemaps.voyager,
+      style: carto.basemaps.darkmatter,
+//      style: carto.basemaps.positron, 
+        center: [-110, 30],
+        zoom: 5
+      })    
+      
+//Connect to a CARTO account by specifying the username and API key you want to use. In this case, we're using a test account and a test access key
+      carto.setDefaultAuth({
+         username: 'rholb',
+         apiKey: 'default_public'
+      })
+     
+//Now that CARTO VL has access, you can add any of the datasets in that account as a source layer to display on the map
+//Learn more about styling with expressions: https://carto.com/developers/carto-vl/reference/#vizspec
+    const viz= new carto.Viz(`
+      width: 4
+      strokeWidth: 0.5
+      strokeColor: black
+      color: rgb(10,185,107)
+    `);
+    const source = new carto.source.Dataset('world_ports')
+    const layer = new carto.Layer('layer', source, viz);
+    layer.addTo(map);
+        
+    </script>
+  </body>
+    
+</html>
