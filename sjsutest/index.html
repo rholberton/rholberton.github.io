@@ -1,44 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us - San Jose State University</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-  .container { width: 80%; margin: auto; overflow: hidden; }
-  header { background: #007BFF; color: #ffffff; padding-top: 30px; min-height: 70px; border-bottom: #0779e4 3px solid; }
-  header h1 { padding: 5px 0; margin: 0; text-align: center; font-size: 24px; }
-  .content { display: flex; flex-wrap: wrap; justify-content: space-around; }
-  .member { flex-basis: 30%; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); margin: 20px; padding: 20px; }
-  .member h2 { color: #333; }
-  .member p { margin: 10px 0; line-height: 1.6; }
-  .member img { max-width: 100%; height: auto; border-radius: 50%; }
-  @media (max-width: 600px) {
-    .content { flex-direction: column; }
-    .member { flex-basis: 90%; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - SJSU Meeting</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #00629B; /* Assuming a primary blue from SJSU */
+            background-color: #F7F7F8; /* Light grey background */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #007D79; /* Assuming a secondary green from SJSU */
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .member {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #cccccc;
+            padding: 20px 0;
+        }
+        .member:last-child {
+            border-bottom: none;
+        }
+        .member img {
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+        .member-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .role {
+            font-size: 16px;
+            color: #555555;
+        }
+        .description {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <h1>About Us - San Jose State University</h1>
-</header>
+    <div class="container">
+        <header>
+            <h1>About Us - SJSU Meeting</h1>
+        </header>
+        <div class="members">
+            <!-- Additional Team Members -->
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Vincent Del Casino" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Vincent Del Casino</div>
+                    <div class="role">Provost and Vice President for Academic Affairs</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+            <!-- Repeat for each new member -->
+            <!-- Sample for additional members -->
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Heather Lattimer" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Heather Lattimer</div>
+                    <div class="role">Interim Vice Provost, Undergraduate Education</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Hiu-Yung Wong" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Hiu-Yung Wong</div>
+                    <div class="role">Chair, Curriculum and Research Committee</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+            <!-- Continue adding members here -->
 
-<div class="container">
-  <div class="content">
-    <!-- Member 1 -->
-    <div class="member">
-      <img src="placeholder-image.jpg" alt="Rhonda Holberton">
-      <h2>Rhonda Holberton</h2>
-      <p>Interim Department Chair, Department of Art & Art History</p>
+            <!-- Adding remaining team members -->
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Magdalena L. Barrera" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Magdalena L. Barrera</div>
+                    <div class="role">Vice Provost, Faculty Success</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Marc d'Alarcao" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Marc d'Alarcao</div>
+                    <div class="role">Dean, College of Graduate Studies</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Marco Antonio Cruz" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Marco Antonio Cruz</div>
+                    <div class="role">Senior Director, Institutional Research and Strategic Analytics</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Melinda Jackson" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Melinda Jackson</div>
+                    <div class="role">Associate Dean, Undergraduate Education</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Mohamed Abousalem" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Mohamed Abousalem</div>
+                    <div class="role">Vice President, Research and Innovation</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Jeffrey Honda" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Jeffrey Honda</div>
+                    <div class="role">Associate Dean, College of Graduate Studies</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Priya Raman" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Priya Raman</div>
+                    <div class="role">Director of Assessment, Academic Innovation and Institutional Effectiveness</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Ronald Rogers" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Ronald Rogers</div>
+                    <div class="role">Vice Provost, Academic Innovation and Institutional Effectiveness</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Richard Mocarski" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Richard Mocarski</div>
+                    <div class="role">Associate Vice President, Research</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Traci Ferdolage" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Traci Ferdolage</div>
+                    <div class="role">Associate Vice President, Facilities and Development</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+
+            <div class="member">
+                <img src="placeholder-image-url.jpg" alt="Huyen Pham" width="100" height="100">
+                <div class="member-info">
+                    <div class="name">Huyen Pham</div>
+                    <div class="role">Institutional Effectiveness Coordinator</div>
+                    <div class="description">Brief description or bio.</div>
+                </div>
+            </div>
+            <!-- End of member addition -->
+
+          
+        </div>
     </div>
-    <!-- More members follow in similar fashion -->
-  </div>
-</div>
-
-<script>
-// Example JavaScript for potential future enhancements
-</script>
+    <script>
+        // Example JavaScript for future interactive features
+        console.log('Page loaded. Implement interactive features as needed.');
+    </script>
 </body>
 </html>
