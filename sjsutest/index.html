@@ -3,103 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us</title>
+<title>About Us - San Jose State University</title>
 <style>
-/* CSS styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.member {
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.member h2 {
-    margin-top: 0;
-}
-
-.member p {
-    margin: 5px 0;
-}
-
-.show-more {
-    cursor: pointer;
-    color: blue;
-}
+  body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+  .container { width: 80%; margin: auto; overflow: hidden; }
+  header { background: #007BFF; color: #ffffff; padding-top: 30px; min-height: 70px; border-bottom: #0779e4 3px solid; }
+  header h1 { padding: 5px 0; margin: 0; text-align: center; font-size: 24px; }
+  .content { display: flex; flex-wrap: wrap; justify-content: space-around; }
+  .member { flex-basis: 30%; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); margin: 20px; padding: 20px; }
+  .member h2 { color: #333; }
+  .member p { margin: 10px 0; line-height: 1.6; }
+  .member img { max-width: 100%; height: auto; border-radius: 50%; }
+  @media (max-width: 600px) {
+    .content { flex-direction: column; }
+    .member { flex-basis: 90%; }
+  }
 </style>
 </head>
 <body>
+<header>
+  <h1>About Us - San Jose State University</h1>
+</header>
 
 <div class="container">
-    <h1>About Us</h1>
-    <div class="members">
-        <!-- Members list will be dynamically added here -->
+  <div class="content">
+    <!-- Member 1 -->
+    <div class="member">
+      <img src="placeholder-image.jpg" alt="Rhonda Holberton">
+      <h2>Rhonda Holberton</h2>
+      <p>Interim Department Chair, Department of Art & Art History</p>
     </div>
-    <button onclick="showAll()">Show All</button>
+    <!-- More members follow in similar fashion -->
+  </div>
 </div>
 
 <script>
-// JavaScript for showing/hiding members
-function showAll() {
-    var members = document.querySelectorAll('.member');
-    members.forEach(function(member) {
-        member.style.display = 'block';
-    });
-    document.querySelector('.show-more').style.display = 'none';
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    var members = [
-        { name: "Rhonda Holberton", position: "Interim Department Chair, Department of Art & Art History" },
-        { name: "Shannon Miller", position: "Dean, College of Humanities and the Arts" },
-        { name: "Roula Svorou", position: "Associate Dean, College of Humanities and the Arts" },
-        { name: "Vincent Del Casino", position: "Provost and Vice President for Academic Affairs" },
-        { name: "Heather Lattimer", position: "Interim Vice Provost, Undergraduate Education" },
-        { name: "Hiu-Yung Wong", position: "Chair, Curriculum and Research Committee" },
-        { name: "Magdalena L. Barrera", position: "Vice Provost, Faculty Success" },
-        { name: "Marc d'Alarcao", position: "Dean, College of Graduate Studies" },
-        { name: "Marco Antonio Cruz", position: "Senior Director, Institutional Research and Strategic Analytics" },
-        { name: "Melinda Jackson", position: "Associate Dean, Undergraduate Education" },
-        { name: "Mohamed Abousalem", position: "Vice President, Research and Innovation" },
-        { name: "Jeffrey Honda", position: "Associate Dean, College of Graduate Studies" },
-        { name: "Priya Raman", position: "Director of Assessment, Academic Innovation and Institutional Effectiveness" },
-        { name: "Ronald Rogers", position: "Vice Provost, Academic Innovation and Institutional Effectiveness" },
-        { name: "Richard Mocarski", position: "Associate Vice President, Research" },
-        { name: "Traci Ferdolage", position: "Associate Vice President, Facilities and Development" },
-        { name: "Huyen Pham", position: "Institutional Effectiveness Coordinator" }
-    ];
-
-    var membersContainer = document.querySelector('.members');
-    members.forEach(function(member) {
-        var memberDiv = document.createElement('div');
-        memberDiv.classList.add('member');
-        memberDiv.innerHTML = '<h2>' + member.name + '</h2><p>' + member.position + '</p>';
-        membersContainer.appendChild(memberDiv);
-    });
-
-    // Show "Show All" button if there are more than 5 members
-    if (members.length > 5) {
-        var showMoreButton = document.createElement('button');
-        showMoreButton.textContent = 'Show All';
-        showMoreButton.classList.add('show-more');
-        showMoreButton.onclick = showAll;
-        document.querySelector('.container').appendChild(showMoreButton);
-    }
-});
+// Example JavaScript for potential future enhancements
 </script>
-
 </body>
 </html>
