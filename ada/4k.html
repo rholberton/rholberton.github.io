@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Binary Image (Full Width)</title>
+  <style>
+    :root {
+      color-scheme: dark;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      overflow-x: hidden;     /* no sideways scroll */
+      overflow-y: auto;       /* vertical scroll */
+    }
+    .wrap {
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+    }
+    img {
+      width: 100%;            /* fill viewport width */
+      height: auto;           /* keep aspect ratio */
+      display: block;
+      image-rendering: pixelated;      /* keep hard edges */
+      image-rendering: crisp-edges;    /* fallback */
+      -ms-interpolation-mode: nearest-neighbor;
+    }
+    .hint {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(6px);
+      color: #ddd;
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      padding: 10px 12px;
+      z-index: 10;
+      text-align: center;
+    }
+    .hint a {
+      color: #fff;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="hint">
+    Scrolling enabled · Image is scaled to your window width.
+    <span style="opacity:.75">Open image in a new tab for 1:1 view:</span>
+    <a href="binary_image_full_3840w.png" target="_blank" rel="noopener">binary_image_full_3840w.png</a>
+  </div>
+
+  <main class="wrap">
+    <!-- Put this HTML file in the same folder as the image -->
+    <img src="binary_image_full_3840w.png" alt="Binary Image (0=black, 1=white)" loading="eager" />
+  </main>
+</body>
+</html>
