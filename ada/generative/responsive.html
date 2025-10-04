@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Binary Tiles Viewer (Responsive)</title>
+  <style>
+    :root { color-scheme: dark; }
+    html, body {
+      margin: 0; padding: 0;
+      background: #000;
+      overflow-x: hidden;     /* no horizontal scroll */
+      overflow-y: auto;       /* vertical scroll */
+      color: #ddd;
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    }
+    .hint {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(0,0,0,.6);
+      backdrop-filter: blur(6px);
+      padding: 10px 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .wrap {
+      width: 100%;
+      max-width: 100vw;
+      margin: 0 auto;
+      display: block;
+    }
+    section.tile {
+      position: relative;
+      width: 100%;
+      background: #111;
+    }
+    canvas {
+      width: 100%;     /* <-- responsive: fills container width */
+      height: auto;    /* preserve aspect ratio */
+      display: block;
+      image-rendering: pixelated;    /* keep hard edges when scaled */
+      image-rendering: crisp-edges;
+    }
+    .meta {
+      position: absolute; right: 8px; top: 8px; z-index: 5;
+      background: rgba(0,0,0,.5);
+      color: #ccc; font-size: 12px; padding: 2px 6px; border-radius: 4px;
+    }
+    .ph  { padding: 20px 12px; color: #9aa; text-align: center; }
+    .err { color: #f88; }
+  </style>
+</head>
+<body>
+  <div class="hint" id="hint">
+    Responsive rendering: canvases fill the window width. Pixels are kept crisp (0=black, 1=white).
+  </div>
+
+  <main id="container" class="wrap"></main>
+
+  <script>
+    // Fetch tile index
+    fetch('index.json').then(r => r.json()).then(index => {
+      const { width: nativeWidth, tiles } = index;
+      const container = document.getElementById('container');
+
+      // Build slots for each tile
+      tiles.forEach((name, i) => {
+        const sec = document.createElement('section');
+        sec.className = 'tile';
+        sec.dataset.src = name;
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = `Tile ${i+1}/${tiles.length}`;
+        sec.appendChild(meta);
+
+        const ph = document.createElement('div');
+        ph.className = 'ph';
+        ph.textContent = `Loading ${name}…`;
+        sec.appendChild(ph);
+
+        container.appendChild(sec);
+      });
+
+      // Lazy-load tiles when visible
+      const inFlight = new Set();
+      const loaded = new Set();
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          const src = el.dataset.src;
+          if (!src || inFlight.has(src) || loaded.has(src)) return;
+          inFlight.add(src);
+          loadTile(el, src)
+            .catch(err => {
+              const ph = el.querySelector('.ph');
+              if (ph) { ph.classList.add('err'); ph.textContent = `Error: ${err.message}`; }
+            })
+            .finally(() => inFlight.delete(src));
+        });
+      }, { root: null, rootMargin: '800px 0px', threshold: 0.01 });
+
+      document.querySelectorAll('section.tile').forEach(el => io.observe(el));
+
+      async function loadTile(containerEl, filename) {
+        const resp = await fetch(filename);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${filename}`);
+        const buf = await resp.arrayBuffer();
+        const view = new DataView(buf);
+
+        // Header: 'BIT1' + width(uint32 LE) + height(uint32 LE)
+        const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
+        if (magic !== 'BIT1') throw new Error('Bad magic in tile');
+        const w = view.getUint32(4, true);
+        const h = view.getUint32(8, true);
+        const data = new Uint8Array(buf, 12);
+
+        // Prepare canvas at native pixel size; CSS scales to 100% width.
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext('2d');
+        const img = ctx.createImageData(w, h);
+        const rgba = img.data;
+
+        // Unpack bits MSB-first
+        let p = 0;
+        for (let i = 0; i < data.length; i++) {
+          const byte = data[i];
+          for (let b = 7; b >= 0; b--) {
+            const v = ((byte >> b) & 1) ? 255 : 0;
+            rgba[p] = v; rgba[p+1] = v; rgba[p+2] = v; rgba[p+3] = 255;
+            p += 4;
+            if (p >= rgba.length) break;
+          }
+        }
+
+        ctx.putImageData(img, 0, 0);
+
+        // Swap in
+        containerEl.querySelector('.ph')?.remove();
+        containerEl.appendChild(canvas);
+        containerEl.querySelector('.meta').textContent =
+          `Tile ${tiles.indexOf(filename)+1}/${tiles.length} · native ${w}px → CSS ${Math.round(containerEl.clientWidth)}px`;
+      }
+
+      // Update the meta badges with current CSS width on resize
+      const ro = new ResizeObserver(entries => {
+        for (const entry of entries) {
+          if (entry.target.classList.contains('tile')) {
+            const meta = entry.target.querySelector('.meta');
+            if (meta) {
+              const text = meta.textContent || '';
+              meta.textContent = text.replace(/CSS \d+px$/, `CSS ${Math.round(entry.contentRect.width)}px`);
+            }
+          }
+        }
+      });
+      document.querySelectorAll('section.tile').forEach(el => ro.observe(el));
+    });
+  </script>
+
+  <noscript>
+    <div class="hint" style="position:static">
+      JavaScript is required to decode and render the tiles.
+    </div>
+  </noscript>
+</body>
+</html>
