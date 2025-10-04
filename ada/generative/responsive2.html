@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
+<title>Binary Bitstream Viewer (1 bit = 1 device pixel)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #000; color: #ddd;
+    overflow-x: hidden;
+    font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  }
+  /* .hint {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 10px 12px; text-align: center;
+  } */
+  main {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+  }
+  section.segment {
+    position: relative;
+    width: 100%;
+    background: #111;
+    min-height: 40px; /* placeholder height before draw */
+  }
+  canvas {
+    display: block;
+    width: 100%;      /* fills window width in CSS pixels */
+    height: auto;     /* device pixels set by canvas.width/height */
+    image-rendering: pixelated; /* crisp edges if browser scales */
+    image-rendering: crisp-edges;
+  }
+  /* .meta {
+    position: absolute; right: 8px; top: 8px; z-index: 5;
+    background: rgba(0,0,0,.5); color: #ccc;
+    font-size: 12px; padding: 2px 6px; border-radius: 4px;
+  } */
+  .ph { padding: 10px 12px; color: #9aa; text-align: center; }
+  .err { color: #f88; }
+</style>
+</head>
+<body>
+  <!-- <div class="hint" id="hint">
+    1 bit → 1 device pixel at 100% zoom. Width follows window; content reflows on resize.
+  </div> -->
+  <main id="container"></main>
+
+<script>
+(async function () {
+  // --- Load tile index ---
+  const index = await (await fetch('index.json')).json();
+  const nativeTileWidth = index.width;           // 880 (not used for layout)
+  const tilesList = index.tiles;                 // ['tile_00.bin', ...]
+  const totalBits = index.total_rows * nativeTileWidth;
+
+  // --- Load tiles into memory (small set; fast) ---
+  const tiles = [];
+  for (const name of tilesList) {
+    const buf = await (await fetch(name)).arrayBuffer();
+    const dv = new DataView(buf);
+    const magic =
+      String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2), dv.getUint8(3));
+    if (magic !== 'BIT1') throw new Error(`Bad magic in ${name}`);
+    const w = dv.getUint32(4, true);
+    const h = dv.getUint32(8, true);
+    const data = new Uint8Array(buf, 12); // packed bits
+    tiles.push({ name, w, h, data, bits: w * h });
+  }
+
+  // Prefix sums of bits to map global bit → tile quickly
+  const tileStart = [];
+  let acc = 0;
+  for (let i = 0; i < tiles.length; i++) {
+    tileStart.push(acc);
+    acc += tiles[i].bits;
+  }
+  const totalBitsFromTiles = acc;
+  const TOTAL_BITS = Math.min(totalBits, totalBitsFromTiles); // safety
+
+  function locateBit(pos) {
+    for (let i = tiles.length - 1; i >= 0; i--) {
+      if (pos >= tileStart[i]) return { i, off: pos - tileStart[i] };
+    }
+    return { i: 0, off: pos };
+  }
+  function readBit(pos) {
+    const { i, off } = locateBit(pos);
+    const t = tiles[i];
+    const byteIndex = off >> 3;
+    const bitInByte = 7 - (off & 7);    // MSB-first
+    return (t.data[byteIndex] >> bitInByte) & 1;
+  }
+
+  const container = document.getElementById('container');
+
+  // --- Responsive layout: 1 bit = 1 device pixel ---
+  const SEG_ROWS_BASE = 1024; // target rows per segment (tuned later to ~8MB RGBA per segment)
+  let segments = [];
+  let io;
+  let currentLayout = { deviceWidth: 0, rows: 0, segRows: 0 };
+
+  function getDevicePixelWidth() {
+    // 1 bit = 1 device pixel at 100% zoom
+    return Math.max(1, Math.floor(window.innerWidth * window.devicePixelRatio));
+  }
+
+  function elementInViewport(el) {
+    const r = el.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    return r.bottom > 0 && r.top < vh;
+  }
+
+  function rebuildLayout() {
+    const deviceWidth = getDevicePixelWidth();
+    if (deviceWidth === currentLayout.deviceWidth && io) {
+      // Still rebuild to force fresh draw with new height per segment if needed
+    }
+
+    const fullRows = Math.floor(TOTAL_BITS / deviceWidth);
+    const totalBitsUsed = fullRows * deviceWidth;
+
+    // Choose segment height so each segment ~≤ 8MB of RGBA
+    // bytes ≈ deviceWidth * segRows * 4
+    const segRows = Math.max(128, Math.min(2048, Math.floor((8 * 1024 * 1024) / (deviceWidth * 4))));
+    container.innerHTML = '';
+    segments = [];
+
+    // Build segments
+    let startBit = 0;
+    while (startBit < totalBitsUsed) {
+      const remainingBits = totalBitsUsed - startBit;
+      const rows = Math.min(segRows, Math.floor(remainingBits / deviceWidth));
+
+      const sec = document.createElement('section');
+      sec.className = 'segment';
+      sec.dataset.startBit = String(startBit);
+      sec.dataset.rows = String(rows);
+
+      // // Optional segment label (commented out)
+      // const meta = document.createElement('div');
+      // meta.className = 'meta';
+      // meta.textContent = `Segment · ${rows} rows`;
+      // sec.appendChild(meta);
+
+      const ph = document.createElement('div');
+      ph.className = 'ph';
+      ph.textContent = 'Rendering…';
+      sec.appendChild(ph);
+
+      container.appendChild(sec);
+      segments.push(sec);
+
+      startBit += rows * deviceWidth;
+    }
+
+    // (Re)create observer
+    if (io) io.disconnect();
+    io = new IntersectionObserver(onIntersect, { root: null, rootMargin: '800px 0px', threshold: 0.01 });
+    segments.forEach(s => io.observe(s));
+
+    currentLayout = { deviceWidth, rows: fullRows, segRows: segRows };
+
+    // Immediately render any segments already in view (so no refresh needed)
+    requestAnimationFrame(forceRenderInView);
+  }
+
+  function forceRenderInView() {
+    for (const sec of segments) {
+      if (!sec.querySelector('canvas') && elementInViewport(sec)) {
+        drawSegment(sec).catch(err => {
+          const ph = sec.querySelector('.ph');
+          if (ph) { ph.classList.add('err'); ph.textContent = `Error: ${err.message}`; }
+        });
+      }
+    }
+  }
+
+  async function drawSegment(sec) {
+    const deviceWidth = currentLayout.deviceWidth;
+    const startBit = Number(sec.dataset.startBit);
+    const rows = Number(sec.dataset.rows);
+
+    // Prepare canvas at *device pixel* resolution:
+    const canvas = document.createElement('canvas');
+    canvas.width = deviceWidth;      // device pixels
+    canvas.height = rows;            // device pixels
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+    const img = ctx.createImageData(deviceWidth, rows);
+    const rgba = img.data;
+
+    // Fill from bitstream
+    let pos = startBit;
+    let p = 0;
+    const endPos = startBit + rows * deviceWidth;
+    while (pos < endPos) {
+      const v = readBit(pos) ? 255 : 0;
+      rgba[p] = v; rgba[p+1] = v; rgba[p+2] = v; rgba[p+3] = 255;
+      p += 4; pos++;
+    }
+    ctx.putImageData(img, 0, 0);
+
+    sec.querySelector('.ph')?.remove();
+    sec.appendChild(canvas);
+  }
+
+  function onIntersect(entries) {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const sec = entry.target;
+      if (sec.querySelector('canvas')) continue;
+      drawSegment(sec).catch(err => {
+        const ph = sec.querySelector('.ph');
+        if (ph) { ph.classList.add('err'); ph.textContent = `Error: ${err.message}`; }
+      });
+    }
+  }
+
+  // Initial render
+  rebuildLayout();
+
+  // Rebuild on window resize (debounced)
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(rebuildLayout, 120);
+  });
+
+  // Rebuild on zoom/DPR changes (poll; robust cross-browser)
+  let lastDPR = window.devicePixelRatio;
+  setInterval(() => {
+    if (window.devicePixelRatio !== lastDPR) {
+      lastDPR = window.devicePixelRatio;
+      rebuildLayout();
+    }
+  }, 400);
+})();
+</script>
+</body>
+</html>
