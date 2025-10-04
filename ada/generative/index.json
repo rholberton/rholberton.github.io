@@ -1,0 +1,18 @@
+{
+  "magic": "BIT1.tiles",
+  "width": 880,
+  "total_rows": 68695,
+  "tile_height": 8192,
+  "num_tiles": 9,
+  "tiles": [
+    "tile_00.bin",
+    "tile_01.bin",
+    "tile_02.bin",
+    "tile_03.bin",
+    "tile_04.bin",
+    "tile_05.bin",
+    "tile_06.bin",
+    "tile_07.bin",
+    "tile_08.bin"
+  ]
+}
