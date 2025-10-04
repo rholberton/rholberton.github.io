@@ -1,170 +1,251 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Binary Tiles Viewer (Responsive)</title>
-  <style>
-    :root { color-scheme: dark; }
-    html, body {
-      margin: 0; padding: 0;
-      background: #000;
-      overflow-x: hidden;     /* no horizontal scroll */
-      overflow-y: auto;       /* vertical scroll */
-      color: #ddd;
-      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    }
-    .hint {
-      position: sticky; top: 0; z-index: 10;
-      background: rgba(0,0,0,.6);
-      backdrop-filter: blur(6px);
-      padding: 10px 12px;
-      text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .wrap {
-      width: 100%;
-      max-width: 100vw;
-      margin: 0 auto;
-      display: block;
-    }
-    section.tile {
-      position: relative;
-      width: 100%;
-      background: #111;
-    }
-    canvas {
-      width: 100%;     /* <-- responsive: fills container width */
-      height: auto;    /* preserve aspect ratio */
-      display: block;
-      image-rendering: pixelated;    /* keep hard edges when scaled */
-      image-rendering: crisp-edges;
-    }
-    .meta {
-      position: absolute; right: 8px; top: 8px; z-index: 5;
-      background: rgba(0,0,0,.5);
-      color: #ccc; font-size: 12px; padding: 2px 6px; border-radius: 4px;
-    }
-    .ph  { padding: 20px 12px; color: #9aa; text-align: center; }
-    .err { color: #f88; }
-  </style>
+<meta charset="utf-8" />
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+/>
+<title>Binary Bitstream Viewer (1 bit = 1 device pixel)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; padding: 0;
+    background: #000; color: #ddd;
+    overflow-x: hidden;
+    font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  }
+  .hint {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: 10px 12px; text-align: center;
+  }
+  main {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+  }
+  section.segment {
+    position: relative;
+    width: 100%;
+    background: #111;
+    min-height: 40px; /* placeholder height before draw */
+  }
+  canvas {
+    display: block;
+    width: 100%;      /* fills window width */
+    height: auto;     /* aspect preserved by device pixels */
+    image-rendering: pixelated; /* crisp edges when browser scales */
+    image-rendering: crisp-edges;
+  }
+  .meta {
+    position: absolute; right: 8px; top: 8px; z-index: 5;
+    background: rgba(0,0,0,.5); color: #ccc;
+    font-size: 12px; padding: 2px 6px; border-radius: 4px;
+  }
+  .ph { padding: 10px 12px; color: #9aa; text-align: center; }
+  .err { color: #f88; }
+</style>
 </head>
 <body>
   <div class="hint" id="hint">
-    Responsive rendering: canvases fill the window width. Pixels are kept crisp (0=black, 1=white).
+    1 bit → 1 <strong>device</strong> pixel at 100% zoom. Width follows window; content reflows on resize.
   </div>
+  <main id="container"></main>
 
-  <main id="container" class="wrap"></main>
+<script>
+(async function () {
+  // --- Load tile index ---
+  const index = await (await fetch('index.json')).json();
+  // Original capture width (not used for display layout; we reflow dynamically):
+  const nativeTileWidth = index.width;           // 880
+  const tilesList = index.tiles;                 // ['tile_00.bin', ...]
+  const tileHeight = index.tile_height;          // 8192 (except last)
+  const totalBits = index.total_rows * nativeTileWidth;
 
-  <script>
-    // Fetch tile index
-    fetch('index.json').then(r => r.json()).then(index => {
-      const { width: nativeWidth, tiles } = index;
-      const container = document.getElementById('container');
+  // --- Load all tiles into memory (small set → ~8–9MB total) ---
+  const tiles = [];
+  for (const name of tilesList) {
+    const buf = await (await fetch(name)).arrayBuffer();
+    const dv = new DataView(buf);
+    const magic =
+      String.fromCharCode(dv.getUint8(0), dv.getUint8(1), dv.getUint8(2), dv.getUint8(3));
+    if (magic !== 'BIT1') throw new Error(`Bad magic in ${name}`);
+    const w = dv.getUint32(4, true);
+    const h = dv.getUint32(8, true);
+    const data = new Uint8Array(buf, 12); // packed bits
+    tiles.push({ name, w, h, data, bits: w * h });
+  }
 
-      // Build slots for each tile
-      tiles.forEach((name, i) => {
-        const sec = document.createElement('section');
-        sec.className = 'tile';
-        sec.dataset.src = name;
+  // Prefix sums of bits to map global bit → tile
+  const tileStart = [];
+  let acc = 0;
+  for (let i = 0; i < tiles.length; i++) {
+    tileStart.push(acc);
+    acc += tiles[i].bits;
+  }
+  const totalBitsFromTiles = acc;
+  const TOTAL_BITS = Math.min(totalBits, totalBitsFromTiles); // safety
 
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.textContent = `Tile ${i+1}/${tiles.length}`;
-        sec.appendChild(meta);
-
-        const ph = document.createElement('div');
-        ph.className = 'ph';
-        ph.textContent = `Loading ${name}…`;
-        sec.appendChild(ph);
-
-        container.appendChild(sec);
-      });
-
-      // Lazy-load tiles when visible
-      const inFlight = new Set();
-      const loaded = new Set();
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          const el = entry.target;
-          const src = el.dataset.src;
-          if (!src || inFlight.has(src) || loaded.has(src)) return;
-          inFlight.add(src);
-          loadTile(el, src)
-            .catch(err => {
-              const ph = el.querySelector('.ph');
-              if (ph) { ph.classList.add('err'); ph.textContent = `Error: ${err.message}`; }
-            })
-            .finally(() => inFlight.delete(src));
-        });
-      }, { root: null, rootMargin: '800px 0px', threshold: 0.01 });
-
-      document.querySelectorAll('section.tile').forEach(el => io.observe(el));
-
-      async function loadTile(containerEl, filename) {
-        const resp = await fetch(filename);
-        if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${filename}`);
-        const buf = await resp.arrayBuffer();
-        const view = new DataView(buf);
-
-        // Header: 'BIT1' + width(uint32 LE) + height(uint32 LE)
-        const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
-        if (magic !== 'BIT1') throw new Error('Bad magic in tile');
-        const w = view.getUint32(4, true);
-        const h = view.getUint32(8, true);
-        const data = new Uint8Array(buf, 12);
-
-        // Prepare canvas at native pixel size; CSS scales to 100% width.
-        const canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-
-        const ctx = canvas.getContext('2d');
-        const img = ctx.createImageData(w, h);
-        const rgba = img.data;
-
-        // Unpack bits MSB-first
-        let p = 0;
-        for (let i = 0; i < data.length; i++) {
-          const byte = data[i];
-          for (let b = 7; b >= 0; b--) {
-            const v = ((byte >> b) & 1) ? 255 : 0;
-            rgba[p] = v; rgba[p+1] = v; rgba[p+2] = v; rgba[p+3] = 255;
-            p += 4;
-            if (p >= rgba.length) break;
-          }
-        }
-
-        ctx.putImageData(img, 0, 0);
-
-        // Swap in
-        containerEl.querySelector('.ph')?.remove();
-        containerEl.appendChild(canvas);
-        containerEl.querySelector('.meta').textContent =
-          `Tile ${tiles.indexOf(filename)+1}/${tiles.length} · native ${w}px → CSS ${Math.round(containerEl.clientWidth)}px`;
+  // Map global bit index → {tileIndex, offsetInTileBits}
+  function locateBit(pos) {
+    // tiles.length is small (e.g., 9), linear scan is fine:
+    for (let i = tiles.length - 1; i >= 0; i--) {
+      if (pos >= tileStart[i]) {
+        return { i, off: pos - tileStart[i] };
       }
+    }
+    return { i: 0, off: pos }; // fallback
+  }
 
-      // Update the meta badges with current CSS width on resize
-      const ro = new ResizeObserver(entries => {
-        for (const entry of entries) {
-          if (entry.target.classList.contains('tile')) {
-            const meta = entry.target.querySelector('.meta');
-            if (meta) {
-              const text = meta.textContent || '';
-              meta.textContent = text.replace(/CSS \d+px$/, `CSS ${Math.round(entry.contentRect.width)}px`);
-            }
-          }
-        }
+  // Read a bit at global position 'pos'
+  function readBit(pos) {
+    const { i, off } = locateBit(pos);
+    const t = tiles[i];
+    const byteIndex = off >> 3;
+    const bitInByte = 7 - (off & 7);    // MSB-first
+    return (t.data[byteIndex] >> bitInByte) & 1;
+  }
+
+  const container = document.getElementById('container');
+
+  // --- Responsive layout: 1 bit = 1 device pixel ---
+  // We render in "segments" (canvases), each with SEG_ROWS rows (device pixels).
+  const SEG_ROWS_BASE = 1024; // tune for memory/perf; larger => fewer segments but more RAM
+  let segments = [];
+  let io; // IntersectionObserver for lazy draw
+  let currentLayout = { deviceWidth: 0, rows: 0, segRows: 0 };
+
+  function getDevicePixelWidth() {
+    // device pixel width at 100% zoom:
+    // innerWidth is CSS px; multiply by DPR to get device pixels.
+    return Math.max(1, Math.floor(window.innerWidth * window.devicePixelRatio));
+  }
+
+  function rebuildLayout() {
+    const deviceWidth = getDevicePixelWidth();
+    if (deviceWidth === currentLayout.deviceWidth && io) return; // nothing changed
+
+    // Compute how many full rows we can draw with this width
+    const fullRows = Math.floor(TOTAL_BITS / deviceWidth);
+    const totalBitsUsed = fullRows * deviceWidth;
+
+    // Choose segment height; try to keep each segment ~4–8 MB of RGBA
+    // bytes = width * rows * 4. For 4K width:
+    //   3840 * 512 * 4 ≈ 7.9 MB  (512 rows per segment)
+    const segRows = Math.max(128, Math.min(2048, Math.floor((8 * 1024 * 1024) / (deviceWidth * 4))));
+    // Clear old
+    container.innerHTML = '';
+    segments = [];
+
+    // Build segment slots
+    let startBit = 0;
+    let segIndex = 0;
+    while (startBit < totalBitsUsed) {
+      const remainingBits = totalBitsUsed - startBit;
+      const rows = Math.min(segRows, Math.floor(remainingBits / deviceWidth));
+      const sec = document.createElement('section');
+      sec.className = 'segment';
+      sec.dataset.startBit = String(startBit);
+      sec.dataset.rows = String(rows);
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = `Segment ${segIndex + 1} · ${rows} rows`;
+      sec.appendChild(meta);
+
+      const ph = document.createElement('div');
+      ph.className = 'ph';
+      ph.textContent = 'Rendering…';
+      sec.appendChild(ph);
+
+      container.appendChild(sec);
+      segments.push(sec);
+
+      startBit += rows * deviceWidth;
+      segIndex++;
+    }
+
+    // (Re)create IntersectionObserver
+    if (io) io.disconnect();
+    io = new IntersectionObserver(onIntersect, { root: null, rootMargin: '800px 0px', threshold: 0.01 });
+    segments.forEach(s => io.observe(s));
+
+    currentLayout = { deviceWidth, rows: fullRows, segRows: segRows };
+    // Update hint
+    document.getElementById('hint').innerHTML =
+      `1 bit → 1 <strong>device</strong> pixel @ 100% zoom · deviceWidth = ${deviceWidth}px · total rows = ${fullRows}`;
+  }
+
+  async function drawSegment(sec) {
+    const deviceWidth = currentLayout.deviceWidth;
+    const startBit = Number(sec.dataset.startBit);
+    const rows = Number(sec.dataset.rows);
+
+    // Prepare canvas at device-pixel resolution:
+    const canvas = document.createElement('canvas');
+    canvas.width = deviceWidth;      // device pixels
+    canvas.height = rows;            // device pixels
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+    const img = ctx.createImageData(deviceWidth, rows);
+    const rgba = img.data;
+
+    // Fill RGBA from the bitstream
+    // Each loop iteration writes one pixel (4 bytes)
+    // Global bit index increments by 1 per pixel.
+    let pos = startBit;
+    let p = 0; // RGBA index
+    const endPos = startBit + rows * deviceWidth;
+
+    // Speed note: small tiles (≈9) → locateBit + read is OK for clarity.
+    while (pos < endPos) {
+      const bit = readBit(pos);
+      const v = bit ? 255 : 0;
+      rgba[p] = v; rgba[p+1] = v; rgba[p+2] = v; rgba[p+3] = 255;
+      p += 4; pos++;
+    }
+
+    ctx.putImageData(img, 0, 0);
+
+    // Swap into DOM
+    sec.querySelector('.ph')?.remove();
+    sec.appendChild(canvas);
+  }
+
+  function onIntersect(entries) {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const sec = entry.target;
+      if (sec.querySelector('canvas')) continue; // already drawn
+      drawSegment(sec).catch(err => {
+        const ph = sec.querySelector('.ph');
+        if (ph) { ph.classList.add('err'); ph.textContent = `Error: ${err.message}`; }
       });
-      document.querySelectorAll('section.tile').forEach(el => ro.observe(el));
-    });
-  </script>
+    }
+  }
 
-  <noscript>
-    <div class="hint" style="position:static">
-      JavaScript is required to decode and render the tiles.
-    </div>
-  </noscript>
+  // Initial layout & listeners
+  rebuildLayout();
+
+  // Reflow on window resize or zoom change
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(rebuildLayout, 150);
+  });
+
+  // Some browsers fire a 'resize' on zoom; if not, we can poll DPR a bit:
+  let lastDPR = window.devicePixelRatio;
+  setInterval(() => {
+    if (window.devicePixelRatio !== lastDPR) {
+      lastDPR = window.devicePixelRatio;
+      rebuildLayout();
+    }
+  }, 400);
+
+})();
+</script>
 </body>
 </html>
