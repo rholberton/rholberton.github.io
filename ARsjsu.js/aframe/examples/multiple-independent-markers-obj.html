@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<!-- include aframe-ar.js -->
+<script src="../build/aframe-ar.js"></script>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+	<a></a>
+</div>
+	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+		<!-- handle unknown marker -->
+		<!-- <a-marker type='unknown'>
+			<a-box depth="1" height="1" width="1" position='0 0.5 0' material='opacity: 0.5; side:double; color:blue;'></a-box>
+		</a-marker> -->
+        
+      <a-assets>
+        
+        <!-- import obj test export from maya: obj & mtl  -->
+        <a-asset-item id="test-obj" src="../../data/data/objFromMaya.obj"></a-asset-item>
+        <a-asset-item id="test-mtl" src="../../data/data/objFromMaya.mtl"></a-asset-item>
+        
+        <!-- import male02: obj & mtl  -->
+        <a-asset-item id="male-obj" src="../../data/data/male02/male02.obj"></a-asset-item>
+        <a-asset-item id="male-mtl" src="../../data/data/male02/male02.mtl"></a-asset-item>
+     
+      </a-assets>
+
+		<!-- hiro marker -->
+		<a-marker preset='hiro'>
+            <a-obj-model src="#test-obj" mtl="#test-mtl" scale="0.1 0.1 0.1"></a-obj-model>
+		</a-marker>  
+        
+
+		<!-- modrian marker &  -->
+        <a-marker type='pattern' url='../../three.js/examples/marker-training/examples/pattern-files/pattern-modrian.patt'>
+			<a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:pink;'>
+				<a-torus-knot radius='0.26' radius-tubular='0.05'
+				animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
+				</a-torus-knot>
+			</a-box>
+		</a-marker>
+
+		<!-- handle house marker -->
+        <a-marker type='pattern' url='../../three.js/examples/marker-training/examples/pattern-files/patternhouseicon.patt'>
+            <a-obj-model src="#male-obj" mtl="#male-mtl" scale="0.025 0.025 0.025"></a-obj-model>
+		</a-marker>
+
+		<!-- add a simple camera -->
+		<a-entity camera></a-entity>
+	</a-scene>
+</body>
+</html>

@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+<!-- include aframe-ar.js -->
+<script src="../build/aframe-ar.js"></script>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
+	<a></a>
+</div>
+	<a-scene embedded arjs='sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+		<!-- handle unknown marker -->
+		<!-- <a-marker type='unknown'>
+			<a-box depth="1" height="1" width="1" position='0 0.5 0' material='opacity: 0.5; side:double; color:blue;'></a-box>
+		</a-marker> -->
+        
+      <a-assets>
+        
+        <!-- import obj test export from maya: obj & mtl  -->
+        <a-asset-item id="skull-obj" src="../../data/data/skull-obj/skull-checker2.obj"></a-asset-item>
+        <a-asset-item id="skull-mtl" src="../../data/data/skull-obj/skull-checker2.mtl"></a-asset-item>
+        
+        <!-- import male02: obj & mtl  -->
+        <a-asset-item id="male-obj" src="../../data/data/male02/male02.obj"></a-asset-item>
+        <a-asset-item id="male-mtl" src="../../data/data/male02/male02.mtl"></a-asset-item>
+         
+        <!-- import Skull gtlf (embeded image texture)  -->
+        <a-asset-item id="skull-tat" src="../../data/data/skull-obj/skull-tat.gltf"></a-asset-item>
+          
+        <!-- import Skull gtlf (animation)  -->
+        <a-asset-item id="skull-ani" src="../../data/data/skull-obj/skullanimation2.gltf"></a-asset-item>
+     
+      </a-assets>
+
+		<!-- hiro marker & skull animation -->
+        <!-- make note of scale, the fbx export from maya to blender gltf makes the models MUCH smaller than the obj to gltf export-->
+		<a-marker preset='hiro'>
+             <a-entity  gltf-model="#skull-ani" scale="5 5 5" rotation= "0 -100 89" position= "0 0 .5" animation-mixer></a-entity>
+		</a-marker>  
+        
+
+		<!-- tatoo marker & skull with image texture -->
+        <a-marker type='pattern' url='../../data/data/skull-obj/pattern-skull-og-trainer2.patt'>
+                <a-obj-model gltf-model="#skull-tat" scale="0.08 0.08 0.08" rotation= "0 -100 89" position= "0 0 .5" animation="property: rotation; to:360 -100 90; dur: 5000; easing: linear; loop: true"></a-obj-model>
+		</a-marker>
+
+		<!-- mondrian  marker with skull obj -->
+        <a-marker type='pattern' url='../../data/data/skull-obj/pattern-modrian.patt'>
+            <a-obj-model src="#skull-obj" mtl="#skull-mtl" scale="0.08 0.08 0.08" rotation= "0 -100 89" position= "0 0 .5"></a-obj-model>
+		</a-marker>
+        
+        
+        
+
+		<!-- add a simple camera -->
+		<a-entity camera></a-entity>
+	</a-scene>
+</body>
+</html>
