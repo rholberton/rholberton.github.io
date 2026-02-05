@@ -44,11 +44,12 @@
             <a-entity  id="shark"
                 gltf-model='./shark/shark.glb'
                 scale="30 30 30"
-                rotation= "0 0 0"
+                <!-- rotation= "0 0 0" -->
                 position="50 50 -100"
                 animation-mixer
                 >
             </a-entity>
+            <a-text id="debugText" value="Marker Detected!" position="0 0 0" rotation="-90 0 0" color="red" visible="false"></a-text>
         </a-nft>
 		<a-entity camera></a-entity>
     </a-scene>
