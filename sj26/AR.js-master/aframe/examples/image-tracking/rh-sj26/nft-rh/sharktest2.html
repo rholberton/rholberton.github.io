@@ -39,13 +39,22 @@
         <a-nft
             type='nft' url='https://rholberton.github.io/sj26/AR.js-master/aframe/examples/image-tracking/rh-sj26/nft-rh/trex/trex-image/trex'
             smooth='true' smoothCount='10' smoothTolerance='0.01' smoothThreshold='5'>
-            <a-entity
+            <a-entity  id="shark"
                 gltf-model='./shark/shark.glb'
-                scale="5 5 5"
+                scale="10 10 10"
                 position="50 50 -100"
                 >
             </a-entity>
         </a-nft>
 		<a-entity camera></a-entity>
     </a-scene>
+
+  <script>
+    document.getElementById("shark").setAttribute("animation-mixer", "clip:swimming");
+    const timedelay = setTimeout(delayFunction, 2000);
+    function delayFunction() {
+      document.getElementById("model").setAttribute("animation-mixer", "clip:bite");
+    }
+  </script>
+
 </body>
