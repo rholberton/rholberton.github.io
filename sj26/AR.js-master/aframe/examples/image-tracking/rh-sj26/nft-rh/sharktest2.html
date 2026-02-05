@@ -41,7 +41,7 @@
             smooth='true' smoothCount='10' smoothTolerance='0.01' smoothThreshold='5'>
             <a-entity  id="shark"
                 gltf-model='./shark/shark.glb'
-                scale="10 10 10"
+                scale="30 30 30"
                 position="50 50 -100"
                 >
             </a-entity>
@@ -49,12 +49,5 @@
 		<a-entity camera></a-entity>
     </a-scene>
 
-  <script>
-    document.getElementById("shark").setAttribute("animation-mixer", "clip:swimming");
-    const timedelay = setTimeout(delayFunction, 2000);
-    function delayFunction() {
-      document.getElementById("shark").setAttribute("animation-mixer", "clip:bite");
-    }
-  </script>
 
 </body>
