@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Marker Evolution � Cracks ? Hole ? Flaming Ball</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- A-Frame (pinned to 1.2.0 for AR.js compatibility) -->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <!-- AR.js (updated to 3.4.7) -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+  <!-- A-Frame Physics System -->
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>`n  <!-- A-Frame Extras for animation-mixer -->`n  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+
+<body>
+  <div id="loading-screen" class="loading">
+    <div class="loading-card">
+      <div class="loading-title">Loading Experience</div>
+      <div class="loading-subtitle">Prefetching assets and preparing AR</div>
+      <div class="loading-bar">
+        <div id="loading-bar-fill"></div>
+      </div>
+      <div id="loading-progress">0%</div>
+      <button id="loading-continue" class="loading-btn" type="button">Enter</button>
+    </div>
+  </div>
+  <div id="onboarding">
+    <div class="onboarding-card">
+      <div class="onboarding-title">Get Ready</div>
+      <div class="onboarding-text">
+        Point your camera at the SJSU logo and the Pattern Court marker.
+        Keep the markers flat, well-lit, and centered in view.
+      </div>
+      <div class="onboarding-actions">
+        <button id="onboarding-close" class="onboarding-btn" type="button">Got it</button>
+      </div>
+    </div>
+  </div>
+  <div id="marker-guide">
+    <div class="marker-pill" id="marker-sjsu">SJSU Logo: <span>Searching</span></div>
+    <div class="marker-pill" id="marker-court">Pattern Court: <span>Searching</span></div>
+  </div>
+
+  <div id="hud">
+    <div id="status">Loading�</div>
+    <div id="controls">
+      <button class="btn" id="debug-shark" type="button">Shark Debug (S/X)</button>
+    </div>
+    <div id="note">Scan both markers: SJSU logo (court) and Pattern Court (shark) to see the sharks.</div>
+  </div>
+
+  <a-scene
+    embedded
+    arjs="sourceType: webcam; trackingMethod: best; debugUIEnabled: false;"
+    vr-mode-ui="enabled:false"
+    renderer="alpha: true; antialias: false; preserveDrawingBuffer: false; colorManagement: true; precision: mediump; powerPreference: high-performance;"
+  >
+    <a-assets>
+      <img id="texCracks" src="assets/cracks.png" crossorigin="anonymous" />
+      <img id="texHole" src="assets/hole.png" crossorigin="anonymous" />
+      <img id="texFlame" src="assets/flame.png" crossorigin="anonymous" />
+      <img id="texHalfCourt" src="assets/half-court.png" crossorigin="anonymous" />
+      
+      <!-- 3D Models -->
+      <a-asset-item id="basketballModel" src="assets/basketball.glb"></a-asset-item>`n      <a-asset-item id="sharkModel1" src="assets/shark1.glb"></a-asset-item>
+      <a-asset-item id="sharkModel2" src="assets/shark2.glb"></a-asset-item>
+      
+      <!-- Sound assets -->
+      <audio id="bounceSound" src="assets/bounce.mp3" preload="auto"></audio>
+      <!-- Note: fly.wav and flame.wav files missing - these elements are kept for future use -->
+      <audio id="flySound" crossorigin="anonymous"></audio>
+      <audio id="flameSound" crossorigin="anonymous" loop></audio>
+      
+      <!-- Video assets -->
+      <video id="videoTexture" src="assets/video.mp4" autoplay loop muted playsinline crossorigin="anonymous" preload="auto"></video>
+    </a-assets>
+
+    <!-- Ground plane for physics (invisible, positioned at marker level) -->
+    <!-- Note: This will be positioned relative to marker in the component -->
+
+    <!-- Lighting we can change by phase -->
+    <a-entity id="ambientLight" light="type: ambient; intensity: 0.9; color: #ffffff"></a-entity>
+    <a-entity id="dirLight" light="type: directional; intensity: 1.1; color: #ffffff" position="1 2 1"></a-entity>
+
+    <!-- Court Marker (SJSU Logo) -->
+    <a-marker
+      id="courtMarker"
+      type="pattern"
+      url="markers/sjsu-logo.patt"
+      emitevents="true"
+    smooth="true"
+    smoothCount="5"
+    smoothTolerance="0.01"
+    smoothThreshold="2"
+    >
+      <!-- Shark content -->
+      <a-entity id="courtSharkRoot" shark-controller></a-entity>
+    </a-marker>
+
+    <!-- Shark Marker - Pattern Court -->
+  <a-marker
+      id="sharkMarker"
+      type="pattern"
+      url="markers/pattern-court.patt"
+    emitevents="true"
+    smooth="true"
+    smoothCount="5"
+    smoothTolerance="0.01"
+    smoothThreshold="2"
+    >
+      <!-- Shark content -->
+      <a-entity id="sharkRoot" shark-controller></a-entity>
+    </a-marker>
+
+    <!-- Additional Shark Markers -->
+    <a-marker
+      id="sharkMarkerA"
+      type="pattern"
+      url="markers/pattern-Shark-A.patt"
+      emitevents="true"
+      smooth="true"
+      smoothCount="5"
+      smoothTolerance="0.01"
+      smoothThreshold="2"
+    >
+      <a-entity id="sharkRootA" shark-controller></a-entity>
+    </a-marker>
+
+    <a-marker
+      id="sharkMarkerB"
+      type="pattern"
+      url="markers/pattern-Shark-B.patt"
+      emitevents="true"
+      smooth="true"
+      smoothCount="5"
+      smoothTolerance="0.01"
+      smoothThreshold="2"
+    >
+      <a-entity id="sharkRootB" shark-controller></a-entity>
+    </a-marker>
+
+    <a-marker
+      id="sharkMarkerC"
+      type="pattern"
+      url="markers/pattern-Shark-C.patt"
+      emitevents="true"
+      smooth="true"
+      smoothCount="5"
+      smoothTolerance="0.01"
+      smoothThreshold="2"
+    >
+      <a-entity id="sharkRootC" shark-controller></a-entity>
+    </a-marker>
+
+    <a-marker
+      id="sharkMarkerD"
+      type="pattern"
+      url="markers/pattern-Shark-D.patt"
+      emitevents="true"
+      smooth="true"
+      smoothCount="5"
+      smoothTolerance="0.01"
+      smoothThreshold="2"
+    >
+      <a-entity id="sharkRootD" shark-controller></a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script src="app.js"></script>
+</body>
+</html>

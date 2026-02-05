@@ -1,0 +1,18 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Open Chrome Incognito",
+      "type": "shell",
+      "command": "start chrome --incognito http://localhost:8000",
+      "windows": {
+        "command": "start chrome --incognito http://localhost:8000"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

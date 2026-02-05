@@ -1,0 +1,268 @@
+:root {
+  --brand-teal: #0a7d86;
+  --brand-teal-dark: #0a6b73;
+  --brand-teal-light: #14a3b0;
+  --brand-ink: #0e2b2d;
+  --card-bg: #f8fbfc;
+  --card-border: rgba(11, 105, 117, 0.25);
+  --shadow-soft: 0 10px 30px rgba(7, 40, 45, 0.18);
+  --shadow-strong: 0 18px 40px rgba(7, 40, 45, 0.25);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 20%, #19b1bf 0%, #0f7c85 45%, #0a5f66 100%);
+  touch-action: none;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+body.loading #hud {
+  visibility: hidden;
+}
+body.ready #loading-screen {
+  opacity: 0;
+  pointer-events: none;
+}
+body.ready #loading-screen .loading-card {
+  transform: translateY(10px) scale(0.98);
+}
+body.ready #onboarding {
+  opacity: 0;
+  pointer-events: none;
+}
+body.ready #marker-guide {
+  opacity: 1;
+}
+/* Loading overlay */
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, rgba(12, 89, 97, 0.92) 0%, rgba(6, 49, 55, 0.98) 70%);
+  color: #f4ffff;
+  transition: opacity 0.35s ease;
+}
+#loading-screen.loading .loading-btn {
+  display: none;
+}
+.loading-card {
+  width: min(420px, 86vw);
+  padding: 28px 26px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--shadow-strong);
+  text-align: center;
+  transform: translateY(0) scale(1);
+  transition: transform 0.35s ease;
+}
+.loading-title {
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: #eaffff;
+}
+.loading-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 18px;
+}
+.loading-bar {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+#loading-bar-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #ffffff 0%, #b2f1f8 50%, #5bd8e5 100%);
+  box-shadow: 0 0 12px rgba(120, 230, 240, 0.45);
+  transition: width 0.2s ease;
+}
+#loading-progress {
+  margin-top: 12px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.loading-btn {
+  margin-top: 16px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.18);
+  color: #f4ffff;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.loading-btn:hover {
+  background: rgba(0, 255, 170, 0.2);
+  transform: translateY(-1px);
+}
+/* Onboarding */
+#onboarding {
+  position: fixed;
+  inset: 0;
+  z-index: 980;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(3, 37, 41, 0.78);
+  color: #f4ffff;
+  transition: opacity 0.35s ease;
+}
+.onboarding-card {
+  width: min(420px, 86vw);
+  padding: 24px 22px 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: var(--shadow-strong);
+  text-align: center;
+}
+.onboarding-title {
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #eaffff;
+  margin-bottom: 10px;
+}
+.onboarding-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+}
+.onboarding-actions {
+  margin-top: 16px;
+}
+.onboarding-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.18);
+  color: #f4ffff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.onboarding-btn:hover {
+  background: rgba(0, 255, 170, 0.2);
+  transform: translateY(-1px);
+}
+/* Marker guide */
+#marker-guide {
+  position: fixed;
+  top: 76px;
+  right: 14px;
+  z-index: 40;
+  display: grid;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.marker-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
+  letter-spacing: 0.2px;
+  box-shadow: var(--shadow-soft);
+}
+.marker-pill span {
+  color: rgba(255, 255, 255, 0.9);
+}
+.marker-pill.active {
+  border-color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+.marker-pill.active span {
+  color: #7dffd3;
+}
+/* Force full-viewport rendering */
+a-scene, canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 2 !important;
+  background: transparent !important;
+}
+/* Keep AR.js video visible beneath the WebGL canvas */
+video#arjs-video {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  display: block !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+}
+/* HUD */
+#hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--brand-ink);
+  font-size: 12px;
+  padding: 12px 12px 10px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  pointer-events: none;
+}
+#controls {
+  margin-top: 8px;
+  display: inline-flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+.btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: #ffffff;
+  color: var(--brand-ink);
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 6px 16px rgba(7, 40, 45, 0.12);
+}
+.btn:hover {
+  background: rgba(20, 163, 176, 0.12);
+}
+.btn.active {
+  background: rgba(20, 163, 176, 0.16);
+  border-color: rgba(11, 105, 117, 0.4);
+  color: var(--brand-ink);
+}
+#note {
+  opacity: 0.9;
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(10, 43, 46, 0.7);
+}
