@@ -27,11 +27,29 @@
 <!-- rawgithack development URL -->
 <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
+  <script>
+  AFRAME.registerComponent('disable-frustum-culling', {
+    init: function () {
+      const el = this.el;
+      el.addEventListener('model-loaded', () => {
+        const model = el.getObject3D('mesh');
+        if (!model) return;
+        model.traverse((node) => {
+          if (node.isMesh) {
+            node.frustumCulled = false;
+          }
+        });
+      });
+    }
+  });
+  </script>
+
 <body style='margin : 0px; overflow: hidden;'>
    <!-- minimal loader shown until image descriptors are loaded -->
   <div class="arjs-loader">
     <div>Loading, please wait...</div>
   </div>
+    
     <a-scene
         vr-mode-ui='enabled: false;'
         renderer="logarithmicDepthBuffer: true; precision: medium;"
@@ -47,7 +65,7 @@
                 rotation= "0 0 0"
                 position="50 50 100"
                 animation-mixer
-                obj.frustumCulled = false;
+                disable-frustum-culling
                 >
             </a-entity>
             <a-text id="debugText" value="Marker Detected!" position="0 0 0" rotation="-90 0 0" color="red"></a-text>

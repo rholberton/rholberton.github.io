@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1.3.0/dist/aframe-master.min.js"></script>
+  <!-- Extras for glb Animation -->
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+
+  <!-- AR.js -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+
+  <style>
+    .arjs-loader {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .arjs-loader div {
+      text-align: center;
+      font-size: 1.25em;
+      color: white;
+    }
+  </style>
+
+  <!-- Custom Component -->
+  <script>
+    AFRAME.registerComponent('disable-frustum-culling', {
+      init: function () {
+        const el = this.el;
+        el.addEventListener('model-loaded', () => {
+          const model = el.getObject3D('mesh');
+          if (!model) return;
+          model.traverse((node) => {
+            if (node.isMesh) {
+              node.frustumCulled = false;
+            }
+          });
+        });
+      }
+    });
+  </script>
+</head>
+
+<body style="margin: 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
+
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true; precision: medium;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+
+    <a-nft
+      type="nft"
+      url="https://rholberton.github.io/sj26/AR.js-master/aframe/examples/image-tracking/rh-sj26/nft-rh/trex/trex-image/trex"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance="0.01"
+      smoothThreshold="5">
+
+      <a-entity id="shark"
+        gltf-model="./shark/rhshark-in-10.glb"
+        scale="10 10 10"
+        rotation="0 -90 0"
+        position="500 100 0"
+        animation-mixer
+        disable-frustum-culling>
+      </a-entity>
+
+<!--
+      <a-text id="debugText"
+        value="Marker Detected!"
+        position="0 200 0"
+        rotation="-90 0 0"
+        color="red">
+      </a-text>
+-->
+    </a-nft>
+
+    <a-entity camera="near: 0.001; far: 10000"></a-entity>
+  </a-scene>
+</body>
+</html>
