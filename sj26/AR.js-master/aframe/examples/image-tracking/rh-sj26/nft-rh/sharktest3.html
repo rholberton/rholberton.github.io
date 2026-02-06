@@ -30,6 +30,7 @@
   </style>
 
   <!-- Custom Component -->
+<!--
   <script>
     AFRAME.registerComponent('disable-frustum-culling', {
       init: function () {
@@ -46,6 +47,7 @@
       }
     });
   </script>
+-->
 </head>
 
 <body style="margin: 0px; overflow: hidden;">
@@ -70,11 +72,10 @@
 
       <a-entity id="shark"
         gltf-model="./shark/rhshark-in-10.glb"
-        scale="10 10 10"
+        scale="70 70 70"
         rotation="0 -90 0"
-        position="500 100 0"
-        animation-mixer
-        disable-frustum-culling>
+        position="50 50 100"
+        animation-mixer>
       </a-entity>
 
 <!--
