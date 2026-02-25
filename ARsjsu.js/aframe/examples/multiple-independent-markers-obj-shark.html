@@ -2,6 +2,7 @@
 <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
 <!-- include aframe-ar.js -->
 <script src="../build/aframe-ar.js"></script>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.1.0/model-viewer.min.js"></script>
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: fixed; top: 10px; width:100%; text-align: center; z-index: 1;'>
 	<a></a>
@@ -21,6 +22,8 @@
         <!-- import male02: obj & mtl  -->
         <a-asset-item id="male-obj" src="../../data/data/male02/male02.obj"></a-asset-item>
         <a-asset-item id="male-mtl" src="../../data/data/male02/male02.mtl"></a-asset-item>
+
+        
      
       </a-assets>
         
@@ -37,11 +40,12 @@
 
 		<!-- shark QR Code marker &  -->
         <a-marker type='pattern' url='../../data/data/pattern-QR-sharks-way-AR.patt'>
-			<a-box position='0 0.5 0' material='opacity: 0.5; side: double;color:pink;'>
-				<a-torus-knot radius='0.26' radius-tubular='0.05'
-				animation="property: rotation; to:360 0 0; dur: 5000; easing: linear; loop: true">
-				</a-torus-knot>
-			</a-box>
+            <a-entity
+              position="-3 -0 5"
+              rotation="-90 0 0"
+              scale="5 5 5"
+              gltf-model="../../data/data/Pose_sharky_01.glb"
+            ></a-entity>         
 		</a-marker>
 
 		<!-- modrian marker &  -->
@@ -61,5 +65,6 @@
 		<!-- add a simple camera -->
 		<a-entity camera></a-entity>
 	</a-scene>
+    
 </body>
 </html>
