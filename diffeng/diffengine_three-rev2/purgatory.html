@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Difference Engine 3.0 — Purgatory (Three.js port)</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    #purgatory_canvas_container { position: relative; width: 600px; height: 400px; }
+    #purgatory_controls { display:flex; gap:8px; align-items:center; margin: 8px 0 12px; }
+    .btn { background:#1a1a1a; color:rgb(187,170,144); border:1px solid rgba(187,170,144,.45); padding:6px 10px; border-radius:4px; cursor:pointer; }
+    .btn:hover { border-color: rgba(187,170,144,.9); }
+    .small { font-size: 12px; opacity: .9; }
+  </style>
+</head>
+<body class="avatar-purgatory">
+
+<div class="container container-nav-left">
+  <div class="page-image"></div>
+
+  <nav id="main-nav" class="nav" aria-label="Main">
+    <ul>
+      <li class="nav-item"><a href="index.html"><img alt="Difference Engine 3" src="assets/img/mi-difference-engine-3.png"></a></li>
+      <li class="nav-item"><a href="museum.html"><img alt="Avatar Museum" src="assets/img/mi-avatar-museum.png"></a></li>
+      <li class="nav-item"><a href="purgatory.html"><img alt="Avatar Purgatory" src="assets/img/mi-avatar-purgatory.png"></a></li>
+      <li class="nav-item"><a href="archive.html"><img alt="Avatar Archive" src="assets/img/mi-avatar-archive.png"></a></li>
+      <li class="nav-item"><a href="history.html"><img alt="Installation History" src="assets/img/mi-installation-history.png"></a></li>
+      <li class="nav-item"><a href="credits.html"><img alt="Credits" src="assets/img/mi-credits.png"></a></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <hr>
+
+    <div class="text-std">
+      <p style="margin-bottom: 20px;">
+        In their altered form, visitor/avatars embark on a one hour journey through a virtual museum, come face to face with ghosts of the museum's past, mingle with other visitors they might otherwise not have encountered, suspend in a purgatorial state...
+        <a href="archive.html" class="link-std text-bold">(continued in the Archive)</a>
+      </p>
+
+      <div id="purgatory_controls">
+        <button id="btn_shuffle" class="btn" type="button">Shuffle avatars</button>
+        <button id="btn_reset" class="btn" type="button">Reset view</button>
+        <span class="small">Tip: click an avatar to “focus” it.</span>
+      </div>
+
+      <div id="purgatory_canvas_container">
+        <div id="purgatory_spinner" class="spinner" aria-hidden="true"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Three.js (classic scripts, not ESM) to avoid CORS issues on static hosts -->
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<!-- Data + scene code -->
+<script src="js/archive-data.js"></script>
+<script src="js/purgatory.js"></script>
+</body>
+</html>
