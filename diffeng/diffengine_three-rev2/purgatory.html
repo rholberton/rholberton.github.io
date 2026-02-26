@@ -3,61 +3,75 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Difference Engine 3.0 — Purgatory (Three.js port)</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Difference Engine 3.0 — Purgatory</title>
+
+  <link rel="stylesheet" href="./assets/css/style.css" />
+
   <style>
-    #purgatory_canvas_container { position: relative; width: 600px; height: 400px; }
-    #purgatory_controls { display:flex; gap:8px; align-items:center; margin: 8px 0 12px; }
-    .btn { background:#1a1a1a; color:rgb(187,170,144); border:1px solid rgba(187,170,144,.45); padding:6px 10px; border-radius:4px; cursor:pointer; }
-    .btn:hover { border-color: rgba(187,170,144,.9); }
-    .small { font-size: 12px; opacity: .9; }
+    html, body { height: 100%; margin: 0; background:#000; color:#fff; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    #purgatory_stage { position: relative; min-height: 100vh; overflow:hidden; }
+    #purgatory_canvas_container { position: relative; width: 100%; height: 100vh; }
+    #purgatory_canvas_container canvas { display:block; width:100%; height:100%; }
+
+    #purgatory_controls {
+      position:absolute; left:0; top:0; right:0;
+      display:flex; gap:8px; padding:10px;
+      z-index:10;
+      pointer-events:none;
+    }
+    #purgatory_controls > * { pointer-events:auto; }
+
+    #purgatory_spinner {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.65);
+      z-index:20;
+    }
+    .spinner_wheel {
+      width:28px; height:28px; border-radius:50%;
+      border:3px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.9);
+      animation: spin 0.9s linear infinite;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
+
+  <script>
+    console.log("purgatory.html parsed:", location.pathname);
+    window.addEventListener("error", (e) => {
+      console.error("GLOBAL ERROR:", e.message, e.filename, e.lineno, e.colno);
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      console.error("UNHANDLED PROMISE:", e.reason);
+    });
+  </script>
 </head>
-<body class="avatar-purgatory">
 
-<div class="container container-nav-left">
-  <div class="page-image"></div>
-
-  <nav id="main-nav" class="nav" aria-label="Main">
-    <ul>
-      <li class="nav-item"><a href="index.html"><img alt="Difference Engine 3" src="assets/img/mi-difference-engine-3.png"></a></li>
-      <li class="nav-item"><a href="museum.html"><img alt="Avatar Museum" src="assets/img/mi-avatar-museum.png"></a></li>
-      <li class="nav-item"><a href="purgatory.html"><img alt="Avatar Purgatory" src="assets/img/mi-avatar-purgatory.png"></a></li>
-      <li class="nav-item"><a href="archive.html"><img alt="Avatar Archive" src="assets/img/mi-avatar-archive.png"></a></li>
-      <li class="nav-item"><a href="history.html"><img alt="Installation History" src="assets/img/mi-installation-history.png"></a></li>
-      <li class="nav-item"><a href="credits.html"><img alt="Credits" src="assets/img/mi-credits.png"></a></li>
-    </ul>
-  </nav>
-
-  <main class="content">
-    <hr>
-
-    <div class="text-std">
-      <p style="margin-bottom: 20px;">
-        In their altered form, visitor/avatars embark on a one hour journey through a virtual museum, come face to face with ghosts of the museum's past, mingle with other visitors they might otherwise not have encountered, suspend in a purgatorial state...
-        <a href="archive.html" class="link-std text-bold">(continued in the Archive)</a>
-      </p>
-
-      <div id="purgatory_controls">
-        <button id="btn_shuffle" class="btn" type="button">Shuffle avatars</button>
-        <button id="btn_reset" class="btn" type="button">Reset view</button>
-        <span class="small">Tip: click an avatar to “focus” it.</span>
-      </div>
-
-      <div id="purgatory_canvas_container">
-        <div id="purgatory_spinner" class="spinner" aria-hidden="true"></div>
+<body>
+  <div id="purgatory_stage">
+    <div id="purgatory_canvas_container" aria-label="Purgatory scene">
+      <div id="purgatory_spinner" aria-hidden="true">
+        <div class="spinner_wheel"></div>
+        <div style="font-size:13px; opacity:.9;">Loading Purgatory…</div>
       </div>
     </div>
-  </main>
-</div>
 
-<!-- Three.js (classic scripts, not ESM) to avoid CORS issues on static hosts -->
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <div id="purgatory_controls">
+      <button id="btn_reset" type="button">Reset View</button>
+      <button id="btn_shuffle" type="button">Shuffle Avatars</button>
+    </div>
+  </div>
 
-<!-- Data + scene code -->
-<script src="js/archive-data.js"></script>
-<script src="js/purgatory.js"></script>
+  <!-- Three.js (classic scripts, NOT ESM modules) -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- Data + scene code -->
+  <script src="./js/archive-data.js"></script>
+  <script src="./js/purgatory.js"></script>
 </body>
 </html>

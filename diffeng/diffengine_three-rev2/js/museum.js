@@ -170,8 +170,8 @@ function start(identity){
   const gltfLoader = new GLTFLoader();
   let mixer = null;
   const museumCandidates = [
-    'assets/gltf/museum_production_15.2.glb',
-    'assets/gltf/museum_shrinked_10000_08.12.16.37.glb'
+    './assets/gltf/museum_production_15.2.glb',
+    './assets/gltf/museum_shrinked_10000_08.12.16.37.glb'
   ];
 
   (async () => {
@@ -232,7 +232,7 @@ function start(identity){
   });
 
   // Eye image (hovering sign)
-  texLoader.load('assets/img/b4w_purgatory_eye.jpg', (eyeTex) => {
+  texLoader.load('./assets/img/b4w_purgatory_eye.jpg', (eyeTex) => {
     eyeTex.colorSpace = THREE.SRGBColorSpace;
     const eye = new THREE.Mesh(
       new THREE.PlaneGeometry(2.8, 1.6),

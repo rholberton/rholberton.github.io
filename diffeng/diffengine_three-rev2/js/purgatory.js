@@ -62,7 +62,7 @@ function fitCameraToObject({ camera, controls, object, fitOffset = 1.4 }){
 }
 
 function addFallbackPurgatory(){
-  texLoader.load('assets/img/b4w_purgatory_eye.jpg', (eyeTex) => {
+  texLoader.load('./assets/img/b4w_purgatory_eye.jpg', (eyeTex) => {
     eyeTex.colorSpace = THREE.SRGBColorSpace;
     eyeTex.wrapS = THREE.RepeatWrapping;
     eyeTex.wrapT = THREE.RepeatWrapping;
@@ -86,7 +86,7 @@ function addFallbackPurgatory(){
 
 async function loadPurgatoryGLB(){
   try {
-    const gltf = await gltfLoader.loadAsync('assets/gltf/purgatory_small.glb');
+    const gltf = await gltfLoader.loadAsync('./assets/gltf/purgatory_small.glb');
     const world = gltf.scene;
     scene.add(world);
 
@@ -144,8 +144,8 @@ function loadAvatars(){
   focused = null;
 
   const sources = [
-    'assets/img/avatar1.jpg','assets/img/avatar2.jpg','assets/img/avatar3.jpg',
-    'assets/img/avatar4.jpg','assets/img/avatar5.jpg','assets/img/avatar6.jpg','assets/img/avatar7.jpg',
+    './assets/img/avatar1.jpg','./assets/img/avatar2.jpg','./assets/img/avatar3.jpg',
+    './assets/img/avatar4.jpg','./assets/img/avatar5.jpg','./assets/img/avatar6.jpg','./assets/img/avatar7.jpg',
     ...pickRandom(ARCHIVE_IMAGES, 28).map(f => `assets/uploads/${f}`)
   ];
 

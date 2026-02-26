@@ -3,89 +3,143 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Difference Engine 3.0 — Museum (Three.js port)</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Difference Engine 3.0 — Museum</title>
+
+  <!-- Use ./ paths so this works from GitHub Pages subfolders -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
+
   <style>
-    #museum_canvas_container { position: relative; width: 600px; height: 400px; }
-    #museum_ui_bar { display:flex; gap:8px; align-items:center; margin: 8px 0 12px; }
-    .btn { background:#1a1a1a; color:rgb(187,170,144); border:1px solid rgba(187,170,144,.45); padding:6px 10px; border-radius:4px; cursor:pointer; }
-    .btn:hover { border-color: rgba(187,170,144,.9); }
-    .small { font-size: 12px; opacity: .9; }
-    .hint { margin-top: 10px; }
-    canvas { display:block; }
+    /* Minimal fallback layout so the page works even if style.css doesn't load */
+    html, body { height: 100%; margin: 0; background:#000; color:#fff; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+
+    #museum_stage { position: relative; min-height: 100vh; overflow: hidden; }
+    #museum_canvas_container { position: relative; width: 100%; height: 100vh; }
+    #museum_canvas_container canvas { display:block; width:100%; height:100%; }
+
+    #museum_ui_bar {
+      position:absolute; left:0; top:0; right:0;
+      display:flex; gap:8px; padding:10px;
+      z-index:10;
+      pointer-events:none;
+    }
+    #museum_ui_bar > * { pointer-events:auto; }
+
+    #museum_spinner {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.65);
+      z-index:20;
+    }
+    .spinner_wheel {
+      width:28px; height:28px; border-radius:50%;
+      border:3px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.9);
+      animation: spin 0.9s linear infinite;
+      margin-right: 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #avatar-input-form {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(0,0,0,0.65);
+      z-index:30;
+    }
+    #avatar-input-form .panel {
+      width: min(560px, 92vw);
+      background: rgba(20,20,20,0.92);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    #avatar-input-form h1 { font-size: 18px; margin:0 0 12px; }
+    #avatar-input-form label { display:block; font-size:13px; margin-top:10px; opacity:0.9; }
+    #avatar-input-form input[type="text"], #avatar-input-form input[type="file"]{
+      width:100%; margin-top:6px; padding:10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.35);
+      color:#fff;
+    }
+    #avatar-input-form button{
+      margin-top:12px; padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color:#fff;
+      cursor:pointer;
+    }
+
+    #museum_message {
+      position:absolute; left:10px; bottom:10px;
+      z-index:10;
+      max-width: min(560px, 92vw);
+      font-size:12px;
+      opacity:0.9;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 8px 10px;
+      white-space: pre-wrap;
+    }
   </style>
+
+  <script>
+    console.log("museum.html parsed:", location.pathname);
+    window.addEventListener("error", (e) => {
+      console.error("GLOBAL ERROR:", e.message, e.filename, e.lineno, e.colno);
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      console.error("UNHANDLED PROMISE:", e.reason);
+    });
+  </script>
 </head>
-<body class="avatar-museum">
 
-<div class="container container-nav-left">
-  <div class="page-image"></div>
+<body>
+  <div id="museum_stage">
+    <div id="museum_canvas_container" aria-label="Museum scene"></div>
 
-  <nav id="main-nav" class="nav" aria-label="Main">
-    <ul>
-      <li class="nav-item"><a href="index.html"><img alt="Difference Engine 3" src="assets/img/mi-difference-engine-3.png"></a></li>
-      <li class="nav-item"><a href="museum.html"><img alt="Avatar Museum" src="assets/img/mi-avatar-museum.png"></a></li>
-      <li class="nav-item"><a href="purgatory.html"><img alt="Avatar Purgatory" src="assets/img/mi-avatar-purgatory.png"></a></li>
-      <li class="nav-item"><a href="archive.html"><img alt="Avatar Archive" src="assets/img/mi-avatar-archive.png"></a></li>
-      <li class="nav-item"><a href="history.html"><img alt="Installation History" src="assets/img/mi-installation-history.png"></a></li>
-      <li class="nav-item"><a href="credits.html"><img alt="Credits" src="assets/img/mi-credits.png"></a></li>
-    </ul>
-  </nav>
-
-  <main class="content">
-    <hr>
-
-    <div class="text-std">
-      <div id="museum_app">
-        <form id="avatar-input-form">
-          <div id="avatar-input-form-controls" class="text-center">
-            <span>Select AVATAR and Enter LOGIN name</span>
-            <input name="loginName" id="museum-avatar-login-name" type="text" placeholder="Enter your LOGIN Name" maxlength="10" />
-            <input type="submit" value="Log in" />
-            <div id="museum_message" class="small" style="margin-top:10px;"></div>
-          </div>
-
-          <div id="avatar-input-form-avatars">
-            <div class="avatar-input-form-avatars-item text-right">
-              <input type="radio" name="avatarImage" value="avatar1" />
-              <img id="avatar_camera_snapshot" alt="avatar1" src="assets/img/avatar1.jpg" />
-              <br>
-              <div id="tooltip-text">(Webcam capture in this port is optional — use the button after logging in.)</div>
-            </div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar2" /><img alt="avatar2" src="assets/img/avatar2.jpg" /><br></div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar3" /><img alt="avatar3" src="assets/img/avatar3.jpg" /><br></div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar4" /><img alt="avatar4" src="assets/img/avatar4.jpg" /><br></div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar5" /><img alt="avatar5" src="assets/img/avatar5.jpg" /><br></div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar6" /><img alt="avatar6" src="assets/img/avatar6.jpg" /><br></div>
-            <div class="avatar-input-form-avatars-item text-right"><input type="radio" name="avatarImage" value="avatar7" /><img alt="avatar7" src="assets/img/avatar7.jpg" /><br></div>
-          </div>
-        </form>
-
-        <section id="museum_stage" hidden>
-          <div id="museum_ui_bar">
-            <button id="btn_reset" class="btn" type="button">Reset view</button>
-            <button id="btn_toggle_labels" class="btn" type="button">Toggle labels</button>
-            <button id="btn_webcam" class="btn" type="button">Use webcam as avatar…</button>
-            <span id="museum_identity" class="small"></span>
-          </div>
-
-          <div id="museum_canvas_container">
-            <div id="museum_spinner" class="spinner" aria-hidden="true"></div>
-          </div>
-
-          <p class="text-std hint">
-            Drag to orbit · Scroll to zoom · Right-drag to pan. This is a simplified Three.js scene standing in for the original Blend4Web museum.
-          </p>
-        </section>
-      </div>
+    <div id="museum_ui_bar">
+      <button id="btn_reset" type="button">Reset View</button>
+      <button id="btn_toggle_labels" type="button">Toggle Labels</button>
+      <button id="btn_webcam" type="button">Webcam Avatar</button>
+      <div id="museum_identity" style="margin-left:auto; opacity:.9; font-size:12px;"></div>
     </div>
-  </main>
-</div>
 
-<!-- Three.js (classic scripts, not ESM) to avoid CORS issues on static hosts -->
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <div id="museum_spinner" style="display:none;">
+      <div class="spinner_wheel"></div>
+      <div style="font-size:13px; opacity:.9;">Loading Museum…</div>
+    </div>
 
-<script src="js/museum.js"></script>
+    <div id="museum_message" aria-live="polite">Booting…</div>
+
+    <form id="avatar-input-form" style="display:none;">
+      <div class="panel">
+        <h1>Enter the Museum</h1>
+        <form id="avatar_form_inner">
+          <label for="museum-avatar-login-name">Login name</label>
+          <input id="museum-avatar-login-name" type="text" autocomplete="off" required />
+
+          <label for="museum-avatar-file">Select an avatar image</label>
+          <input id="museum-avatar-file" type="file" accept="image/*" required />
+
+          <button type="submit">Enter</button>
+        </form>
+        <p style="margin:10px 0 0; font-size:12px; opacity:.8;">
+          Tip: run via a local server (not file://) so glTF can load.
+        </p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Three.js (classic scripts, NOT ESM modules) -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- Museum scene logic -->
+  <script src="./js/museum.js"></script>
+
 </body>
 </html>
